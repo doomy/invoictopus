@@ -1,0 +1,108 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.7rem;
+    font-size: 0.94rem;
+}
+
+.wrapper {
+    width: 1170px;
+    margin: 0 auto;
+    padding-top: 5rem;
+}
+
+.head {
+    width: 100%;
+    text-align: center;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 2.2rem;
+    margin-bottom: 1.4rem;
+    line-height: 2.5rem;
+    font-family: "Arial";
+}
+
+.smaller {
+    font-size: 90%;
+}
+
+table.supplier-client {
+    margin: 5rem;
+}
+
+table {
+    width: 100%;
+}
+
+th {
+    font-weight: normal;
+}
+
+table.symetric th, table.symetric td {
+    width: 50%;
+    text-align: left;
+}
+
+table th, table td {
+    padding: 1.2rem  0.6rem;
+}
+
+table td table td, table td table th {
+    padding: 0;
+}
+
+.name { font-size: 130%; font-weight: bold; }
+
+table.table-items, table.total, .footer {
+    width: 80%;
+}
+
+table.table-items td, table.table-items th {
+
+}
+
+table.table-items, table.total, footer {
+    margin: 0 auto;
+}
+
+table.table-items thead th {
+    border-bottom: 1px solid black;
+    font-weight: bold;
+}
+
+table.total tbody tr td {
+    padding-right: 0;
+}
+
+table.table-items tr.items-head-row {
+    border-bottom: 1px solid black;
+}
+
+table.table-items th, table.table-items td {
+    white-space: nowrap;
+    text-align: right;
+}
+
+table.table-items thead tr th:first-child,
+table.table-items tbody tr td:first-child {
+    text-align: left;
+}
+
+table.total {
+    margin-top: 2rem;
+}
+
+table.total td:nth-child(2) {
+    text-align: right;
+    border-top: 1px solid black;
+    font-size: 2.7rem;
+    font-weight: bold;
+    line-height: 3.6rem;
+}
+
+.footer {
+    margin: 0 auto;
+    text-align: right;
+    margin-top: 7rem;
+}

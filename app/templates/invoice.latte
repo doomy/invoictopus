@@ -1,0 +1,170 @@
+<!doctype html>
+
+<html lang="cs">
+<head>
+    <meta charset="utf-8">
+    <title>Faktura {$invoiceNr}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" media="all" href="{$basePath}/css/reset.css">
+    <link rel="stylesheet" media="all" href="{$basePath}/css/main.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="head">
+            <h1>Faktura<br/> {$invoiceNr}</h1>
+            <span class="smaller">Daňový doklad</span>
+        </div>
+    </div>
+
+    <table class="supplier-client symetric">
+        <thead>
+        <tr>
+            <th class="participant-label">Dodavatel</th>
+            <th class="participant-label">Odběratel</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <span class="name">{$supplierName}</span> <br/>
+                {$supplierAddress1} <br/>
+                {$supplierAddress2}
+            </td>
+            <td>
+                <span class="name">{$customerName}</span> <br/>
+                {$customerAddress1} <br/>
+                {$customerAddress2}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table class="symetric">
+                    <tr>
+                        <th>IČ</th>
+                        <td>{$supplierCompanyNr}</td>
+                    </tr>
+                    <tr>
+                        <th>DIČ</th>
+                        <td>{$supplierVatNr}</td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table class="symetric">
+                    <tr>
+                        <th>IČ</th>
+                        <td>{$customerCompanyNr}</td>
+                    </tr>
+                    <tr>
+                        <th>DIČ</th>
+                        <td>{$customerVatNr}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">Dodavatel není plátcem DPH.</td>
+        </tr>
+        <tr>
+            <td>
+                <table class="symetric">
+                    <tr>
+                        <th>Způsob úhrady</th>
+                        <td>Bankovní převod</td>
+                    </tr>
+                    <tr>
+                        <th>Variabilní symbol</th>
+                        <td>{$invoiceNr}</td>
+                    </tr>
+                    <tr>
+                        <th>Bankovní účet</th>
+                        <td>{$bankAccountNr}</td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table class="symetric">
+                    <tr>
+                        <th>Datum vystavení</th>
+                        <td>{$invoiceDate|date:'j.n.Y'}</td>
+                    </tr>
+                    <tr>
+                        <th>Datum zdan. plnění</th>
+                        <td>{$taxableDate|date:'j.n.Y'}</td>
+                    </tr>
+                    <tr>
+                        <th>Datum splatnosti</th>
+                        <td>{$dueDate|date:'j.n.Y'}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="table-items">
+        <thead>
+        <tr class="items-head-row">
+            <th>
+            </th>
+            <th>
+                Mn.
+            </th>
+            <th>
+                Cena
+            </th>
+            <th>
+                Základ DPH
+            </th>
+            <th>
+                DPH %
+            </th>
+            <th>
+                Cena celkem
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $invoicedItems as $invoicedItem}
+            <tr>
+                <td>
+                    {$invoicedItem[item]}
+                </td>
+                <td>
+                    {$invoicedItem[amount]|number}
+                </td>
+                <td>
+                    {$invoicedItem[price]|price}
+                </td>
+                <td>
+                    {$invoicedItem[price]|price}
+                </td>
+                <td>
+                    0
+                </td>
+                <td>
+                    {$invoicedItem[total]|price} {$invoicedItem[currency]}
+                </td>
+            </tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+    <table class="symetric total">
+        <tbody>
+        <tr>
+            <td>
+            </td>
+            <td class="total">
+                {$total[amount]|price} {$total[currency]}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="footer smaller">
+        Vystavil(a): {$supplierName}
+    </div>
+</body>
+</html>

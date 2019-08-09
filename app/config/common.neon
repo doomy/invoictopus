@@ -1,0 +1,21 @@
+parameters:
+    migrator:
+        migrations_directory: ../sql
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+
+
+session:
+	expiration: 14 days
+
+services:
+	router: App\Router\RouterFactory::createRouter
+	connection: Doomy\CustomDibi\Connection(%dibi%)
+	entityFactory: Doomy\Repository\EntityFactory(@connection)
+	repoFactory: Doomy\Repository\RepoFactory(@connection, @entityFactory)
+	entityCache: Doomy\EntityCache\EntityCache
+	dataProvider: Doomy\DataProvider\DataProvider(@repoFactory, @entityCache)
+	migrator: Doomy\Migrator\Migrator(@connection, @dataProvider, %migrator%)
