@@ -4,7 +4,7 @@
 	"keywords": ["nette"],
 	"type": "project",
 	"license": ["MIT", "BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
-	"version": "0.12",
+	"version": "0.2.0",
 	"require": {
 		"php": ">= 7.1",
 		"nette/application": "^3.0",
@@ -24,7 +24,8 @@
 		"mpdf/mpdf": "8.0.0",
 		"doomy/dataprovider": ">=1.0.1",
 		"doomy/migrator": ">=1.0.5",
-		"doomy/extended-nette-form": "^2.2.1"
+		"doomy/extended-nette-form": "^2.2.1",
+		"doomy/repository": ">=2.0.0"
 	},
 	"repositories": [
 		{

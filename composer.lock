@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20585423783f5f786e9df26c5aba40b2",
+    "content-hash": "12c27e697ed036e061f78816a84ac4be",
     "packages": [
         {
             "name": "dibi/dibi",
@@ -215,16 +215,16 @@
         },
         {
             "name": "doomy/repository",
-            "version": "1.2.5",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doomy/repository.git",
-                "reference": "16aab5a41eb9867b9021edc05882ac7556cac690"
+                "reference": "601dca9f6bb6cbcad88d42f9ef75534c0e3a6fd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doomy/repository/zipball/16aab5a41eb9867b9021edc05882ac7556cac690",
-                "reference": "16aab5a41eb9867b9021edc05882ac7556cac690",
+                "url": "https://api.github.com/repos/doomy/repository/zipball/601dca9f6bb6cbcad88d42f9ef75534c0e3a6fd9",
+                "reference": "601dca9f6bb6cbcad88d42f9ef75534c0e3a6fd9",
                 "shasum": ""
             },
             "require": {
@@ -239,7 +239,7 @@
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2019-08-10T16:40:13+00:00"
+            "time": "2019-09-03T10:18:39+00:00"
         },
         {
             "name": "latte/latte",

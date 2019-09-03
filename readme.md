@@ -2,7 +2,6 @@ Invoictopus
 =================
 TODO: 
 - implement translations (czech only ATM)
-- save invoice in the database
 
 Requirements
 ------------
@@ -12,5 +11,5 @@ Requirements
 
 Installation
 ------------
-- setup dibi environment in your local.neon file
+- create db schema, setup dibi environment in your local.neon file
 - Make directories `temp/` and `log/` writable.

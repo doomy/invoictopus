@@ -3,6 +3,7 @@
 namespace App\Presenters;
 
 use Invoictopus\Invoice\Invoice;
+use Invoictopus\Invoice\Item;
 use Invoictopus\Response\MpdfResponse;
 use Invoictopus\TemplateFilter\Price;
 use Latte\Engine as LatteEngine;
@@ -32,7 +33,9 @@ class InvoicePresenter extends Presenter
     public function renderGenerate() {
         $latte = new LatteEngine();
         $latte->addFilter('price', new Price());
-        $html = $latte->renderToString(__DIR__ . '/../templates/invoice.latte', $this->getTemplateData());
+        $templateData = $this->getTemplateData();
+        $html = $latte->renderToString(__DIR__ . '/../templates/invoice.latte', $templateData);
+        $this->saveInvoice($templateData);
         $response = new MpdfResponse($html);
 
         $this->sendResponse($response);
@@ -75,9 +78,6 @@ class InvoicePresenter extends Presenter
 
     private function getTemplateData(): array
     {
-        $invoiceDate = new \DateTimeImmutable();
-        $dueDate = $invoiceDate->add(new \DateInterval('P15D'));
-
         $itemAmount = (int)$this->getHttpRequest()->getPost('ITEM_AMOUNT');
         $itemPrice = (float)$this->getHttpRequest()->getPost('ITEM_PRICE');
         $itemVatRate = $this->getHttpRequest()->getPost('ITEM_VAT_RATE');
@@ -135,6 +135,42 @@ class InvoicePresenter extends Presenter
         }
 
         return $itemPrice;
+    }
+
+    private function saveInvoice(array $invoiceData) {
+        $this->dataProvider->save(
+            Invoice::class,
+            [
+                'ID' => $invoiceData['invoiceNr'],
+                'SUPPLIER_NAME' => $invoiceData['supplierName'],
+                'SUPPLIER_ADDRESS_1' => $invoiceData['supplierAddress1'],
+                'SUPPLIER_ADDRESS_2' => $invoiceData['supplierAddress2'],
+                'SUPPLIER_COMPANY_NR' => $invoiceData['supplierCompanyNr'],
+                'SUPPLIER_VAT_NR' => $invoiceData['supplierVatNr'],
+                'CUSTOMER_NAME' => $invoiceData['customerName'],
+                'CUSTOMER_ADDRESS_1' => $invoiceData['customerAddress1'],
+                'CUSTOMER_ADDRESS_2' => $invoiceData['customerAddress2'],
+                'CUSTOMER_COMPANY_NR' => $invoiceData['customerCompanyNr'],
+                'CUSTOMER_VAT_NR' => $invoiceData['customerVatNr'],
+                'BANK_ACCOUNT_NR' => $invoiceData['bankAccountNr'],
+                'INVOICE_DATE' => new \DateTime($invoiceData['invoiceDate']),
+                'TAXABLE_DATE' => new \DateTime($invoiceData['taxableDate']),
+                'DUE_DATE' => new \DateTime($invoiceData['dueDate'])
+            ]
+        );
+        foreach ($invoiceData['invoicedItems'] as $item) {
+            $this->dataProvider->save(
+                Item::class,
+                [
+                    'INVOICE_ID' => $invoiceData['invoiceNr'],
+                    'ITEM_NAME' => $item['item'],
+                    'AMOUNT' => $item['amount'],
+                    'PRICE' => $item['price'],
+                    'VAT_RATE' => $item['vatRate'],
+                    'CURRENCY' => $item['currency']
+                ]
+            );
+        }
     }
 
 }
