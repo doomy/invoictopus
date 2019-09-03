@@ -1,9 +1,10 @@
 {
-	"name": "nette/web-project",
+	"name": "doomy/invoictopus",
 	"description": "Nette: Standard Web Project",
 	"keywords": ["nette"],
 	"type": "project",
 	"license": ["MIT", "BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+	"version": "0.11",
 	"require": {
 		"php": ">= 7.1",
 		"nette/application": "^3.0",
