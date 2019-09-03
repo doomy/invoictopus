@@ -46,6 +46,7 @@ class InvoicePresenter extends Presenter
         /** @var Invoice */
         $lastInvoice = $this->getLastInvoice();
         $form = new Form();
+        $form->setAction($this->link('Invoice:generate'));
         $form->addInteger('ID', 'Invoice id')->setDefaultValue((int)$lastInvoice->ID+1);
         $form->addText('SUPPLIER_NAME')->setDefaultValue($lastInvoice->SUPPLIER_NAME);
         $form->addText('SUPPLIER_ADDRESS_1')->setDefaultValue($lastInvoice->SUPPLIER_ADDRESS_1);
@@ -64,59 +65,53 @@ class InvoicePresenter extends Presenter
         $items = $lastInvoice->getItems();
         $item = array_shift($items);
         $form->addText('ITEM_NAME')->setDefaultValue($item->ITEM_NAME);
-        $form->addInteger('AMOUNT')->setDefaultValue($item->AMOUNT);
+        $form->addInteger('ITEM_AMOUNT')->setDefaultValue($item->AMOUNT);
+        $form->addInteger('ITEM_PRICE')->setDefaultValue($item->PRICE);
+        $form->addInteger('ITEM_VAT_RATE', 'VAT rate(%)')->setDefaultValue($item->VAT_RATE);
+        $form->addSubmit('Generate', 'Generate');
 
-        /*
-        $form->addText()->setDefaultValue($lastInvoice->);
-        $form->addText()->setDefaultValue($lastInvoice->);
-        $form->addText()->setDefaultValue($lastInvoice->);
-        $form->addText()->setDefaultValue($lastInvoice->);
-        $form->addText()->setDefaultValue($lastInvoice->);
-        $form->addText()->setDefaultValue($lastInvoice->);
-        $form->addText()->setDefaultValue($lastInvoice->);
-        $form->addText()->setDefaultValue($lastInvoice->);
-        $form->addText()->setDefaultValue($lastInvoice->);
-        $form->addText()->setDefaultValue($lastInvoice->);
-        $form->addText()->setDefaultValue($lastInvoice->);
-        $form->addText()->setDefaultValue($lastInvoice->);
-        $form->addText()->setDefaultValue($lastInvoice->);
-        $form->addText()->setDefaultValue($lastInvoice->);*/
         return $form;
     }
 
     private function getTemplateData(): array
     {
+        $invoiceDate = new \DateTimeImmutable();
+        $dueDate = $invoiceDate->add(new \DateInterval('P15D'));
 
+        $itemAmount = (int)$this->getHttpRequest()->getPost('ITEM_AMOUNT');
+        $itemPrice = (float)$this->getHttpRequest()->getPost('ITEM_PRICE');
+        $itemVatRate = $this->getHttpRequest()->getPost('ITEM_VAT_RATE');
+        $itemTotalPrice = $this->calculateTotalPrice($itemAmount, $itemPrice, $itemVatRate);
 
         return [
             'basePath' => $this->getHttpRequest()->getUrl()->getBasePath(),
-            'invoiceNr' => 56,
-            'supplierName' => 'Vladimír Bártek',
-            'supplierAddress1' => 'Špitálská 669/8',
-            'supplierAddress2' => '190 00 Praha 9',
-            'supplierCompanyNr' => '04572777',
-            'supplierVatNr' => 'Neplátce DPH',
-            'customerName' => 'Shoptet s.r.o.',
-            'customerAddress1' => 'Dvořeckého 628/8',
-            'customerAddress2' => '169 00 Praha',
-            'customerCompanyNr' => '28935675',
-            'customerVatNr' => 'CZ28935675',
-            'bankAccountNr' => '670100-2201399432/6210',
-            'invoiceDate' => $invoiceDate,
-            'taxableDate' => (new \DateTime())->modify("last day of previous month"),
-            'dueDate' => $dueDate,
+            'invoiceNr' => $this->getHttpRequest()->getPost('ID'),
+            'supplierName' => $this->getHttpRequest()->getPost('SUPPLIER_NAME'),
+            'supplierAddress1' => $this->getHttpRequest()->getPost('SUPPLIER_ADDRESS_1'),
+            'supplierAddress2' => $this->getHttpRequest()->getPost('SUPPLIER_ADDRESS_2'),
+            'supplierCompanyNr' => $this->getHttpRequest()->getPost('SUPPLIER_COMPANY_NR'),
+            'supplierVatNr' => $this->getHttpRequest()->getPost('SUPPLIER_VAT_NR'),
+            'customerName' => $this->getHttpRequest()->getPost('CUSTOMER_NAME'),
+            'customerAddress1' => $this->getHttpRequest()->getPost('CUSTOMER_ADDRESS_1'),
+            'customerAddress2' => $this->getHttpRequest()->getPost('CUSTOMER_ADDRESS_2'),
+            'customerCompanyNr' => $this->getHttpRequest()->getPost('CUSTOMER_COMPANY_NR'),
+            'customerVatNr' => $this->getHttpRequest()->getPost('CUSTOMER_VAT_NR'),
+            'bankAccountNr' => $this->getHttpRequest()->getPost('BANK_ACCOUNT_NR'),
+            'invoiceDate' => $this->getHttpRequest()->getPost('INVOICE_DATE'),
+            'taxableDate' => $this->getHttpRequest()->getPost('TAXABLE_DATE'),
+            'dueDate' => $this->getHttpRequest()->getPost('DUE_DATE'),
             'invoicedItems' => [
                 [
-                    'item' => 'PHP Vývoj na projektu',
-                    'amount' => 1,
-                    'price' => 75000,
-                    'vatRate' => 0,
-                    'total' => 75000,
+                    'item' => $this->getHttpRequest()->getPost('ITEM_NAME'),
+                    'amount' => $itemAmount,
+                    'price' => $itemPrice,
+                    'vatRate' => $itemVatRate,
+                    'total' => $itemTotalPrice,
                     'currency' => 'CZK'
                 ]
             ],
             'total' => [
-                'amount' => 75000,
+                'amount' => $itemTotalPrice,
                 'currency' => 'CZK'
             ]
         ];
@@ -131,6 +126,15 @@ class InvoicePresenter extends Presenter
         return $this->lastInvoice = $this->dataProvider->findOne(
             Invoice::class, [], 'ID DESC'
         );
+    }
+
+    private function calculateTotalPrice(int $amount, float $itemPrice, int $vatRate) {
+        if ($vatRate > 0) {
+            $vat = ($itemPrice / 100) * $vatRate;
+            $itemPrice += $vat;
+        }
+
+        return $itemPrice;
     }
 
 }
