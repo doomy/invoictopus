@@ -10,6 +10,7 @@ use Latte\Engine as LatteEngine;
 use Doomy\ExtendedNetteForm\Form;
 use Nette\Application\UI\Presenter;
 use Doomy\DataProvider\DataProvider;
+use Nette\ComponentModel\IComponent;
 
 class InvoicePresenter extends Presenter
 {
@@ -48,24 +49,31 @@ class InvoicePresenter extends Presenter
 
         /** @var Invoice */
         $lastInvoice = $this->getLastInvoice();
+        $referenceInvoice = NULL;
+        if (isset($_POST['invoice_id'])) {
+            $referenceInvoice = $this->dataProvider->findById(Invoice::class, $_POST['invoice_id']);
+        }
+        if (empty($referenceInvoice)) {
+            $referenceInvoice = $lastInvoice;
+        }
         $form = new Form();
         $form->setAction($this->link('Invoice:generate'));
         $form->addInteger('ID', 'Invoice id')->setDefaultValue((int)$lastInvoice->ID+1);
-        $form->addText('SUPPLIER_NAME')->setDefaultValue($lastInvoice->SUPPLIER_NAME);
-        $form->addText('SUPPLIER_ADDRESS_1')->setDefaultValue($lastInvoice->SUPPLIER_ADDRESS_1);
-        $form->addText('SUPPLIER_ADDRESS_2')->setDefaultValue($lastInvoice->SUPPLIER_ADDRESS_2);
-        $form->addText('SUPPLIER_COMPANY_NR')->setDefaultValue($lastInvoice->SUPPLIER_COMPANY_NR);
-        $form->addText('SUPPLIER_VAT_NR')->setDefaultValue($lastInvoice->SUPPLIER_VAT_NR);
-        $form->addText('CUSTOMER_NAME')->setDefaultValue($lastInvoice->CUSTOMER_NAME);
-        $form->addText('CUSTOMER_ADDRESS_1')->setDefaultValue($lastInvoice->CUSTOMER_ADDRESS_1);
-        $form->addText('CUSTOMER_ADDRESS_2')->setDefaultValue($lastInvoice->CUSTOMER_ADDRESS_2);
-        $form->addText('CUSTOMER_COMPANY_NR')->setDefaultValue($lastInvoice->CUSTOMER_COMPANY_NR);
-        $form->addText('CUSTOMER_VAT_NR')->setDefaultValue($lastInvoice->CUSTOMER_VAT_NR);
-        $form->addText('BANK_ACCOUNT_NR')->setDefaultValue($lastInvoice->BANK_ACCOUNT_NR);
+        $form->addText('SUPPLIER_NAME')->setDefaultValue($referenceInvoice->SUPPLIER_NAME);
+        $form->addText('SUPPLIER_ADDRESS_1')->setDefaultValue($referenceInvoice->SUPPLIER_ADDRESS_1);
+        $form->addText('SUPPLIER_ADDRESS_2')->setDefaultValue($referenceInvoice->SUPPLIER_ADDRESS_2);
+        $form->addText('SUPPLIER_COMPANY_NR')->setDefaultValue($referenceInvoice->SUPPLIER_COMPANY_NR);
+        $form->addText('SUPPLIER_VAT_NR')->setDefaultValue($referenceInvoice->SUPPLIER_VAT_NR);
+        $form->addText('CUSTOMER_NAME')->setDefaultValue($referenceInvoice->CUSTOMER_NAME);
+        $form->addText('CUSTOMER_ADDRESS_1')->setDefaultValue($referenceInvoice->CUSTOMER_ADDRESS_1);
+        $form->addText('CUSTOMER_ADDRESS_2')->setDefaultValue($referenceInvoice->CUSTOMER_ADDRESS_2);
+        $form->addText('CUSTOMER_COMPANY_NR')->setDefaultValue($referenceInvoice->CUSTOMER_COMPANY_NR);
+        $form->addText('CUSTOMER_VAT_NR')->setDefaultValue($referenceInvoice->CUSTOMER_VAT_NR);
+        $form->addText('BANK_ACCOUNT_NR')->setDefaultValue($referenceInvoice->BANK_ACCOUNT_NR);
         $form->addDate('INVOICE_DATE')->setDefaultValue($invoiceDate);
         $form->addDate('TAXABLE_DATE')->setDefaultValue((new \DateTime())->modify("last day of previous month"));
         $form->addDate('DUE_DATE')->setDefaultValue($dueDate);
-        $items = $lastInvoice->getItems();
+        $items = $referenceInvoice->getItems();
         $item = array_shift($items);
         $form->addText('ITEM_NAME')->setDefaultValue($item->ITEM_NAME);
         $form->addInteger('ITEM_AMOUNT')->setDefaultValue($item->AMOUNT);
@@ -73,6 +81,22 @@ class InvoicePresenter extends Presenter
         $form->addInteger('ITEM_VAT_RATE', 'VAT rate(%)')->setDefaultValue($item->VAT_RATE);
         $form->addSubmit('Generate', 'Generate');
 
+        return $form;
+    }
+
+    public function createComponentInvoiceTemplateForm(): ?IComponent
+    {
+        $invoices = $this->dataProvider->findAll(Invoice::class);
+        $items = [];
+        /** @var Invoice $invoice */
+        foreach ($invoices as $invoice) {
+            $items[$invoice->ID] = sprintf("Invoice %d", $invoice->ID) . ": " . $invoice->CUSTOMER_NAME;
+        }
+        $items = array_reverse($items, TRUE);
+        $form = new Form();
+        $form->addSelect('invoice_id', 'Select reference invoice', $items);
+        $form->addSubmit("go", "Go!");
+        $form->setAction($this->link('Invoice:form'));
         return $form;
     }
 
@@ -107,13 +131,13 @@ class InvoicePresenter extends Presenter
                     'price' => $itemPrice,
                     'vatRate' => $itemVatRate,
                     'total' => $itemTotalPrice,
-                    'currency' => 'CZK'
-                ]
+                    'currency' => 'CZK',
+                ],
             ],
             'total' => [
                 'amount' => $itemTotalPrice,
-                'currency' => 'CZK'
-            ]
+                'currency' => 'CZK',
+            ],
         ];
     }
 
@@ -155,7 +179,7 @@ class InvoicePresenter extends Presenter
                 'BANK_ACCOUNT_NR' => $invoiceData['bankAccountNr'],
                 'INVOICE_DATE' => new \DateTime($invoiceData['invoiceDate']),
                 'TAXABLE_DATE' => new \DateTime($invoiceData['taxableDate']),
-                'DUE_DATE' => new \DateTime($invoiceData['dueDate'])
+                'DUE_DATE' => new \DateTime($invoiceData['dueDate']),
             ]
         );
         foreach ($invoiceData['invoicedItems'] as $item) {
@@ -167,7 +191,7 @@ class InvoicePresenter extends Presenter
                     'AMOUNT' => $item['amount'],
                     'PRICE' => $item['price'],
                     'VAT_RATE' => $item['vatRate'],
-                    'CURRENCY' => $item['currency']
+                    'CURRENCY' => $item['currency'],
                 ]
             );
         }
