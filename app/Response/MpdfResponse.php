@@ -37,6 +37,7 @@ class MpdfResponse implements \Nette\Application\IResponse
                     'B' => 'arialbd.ttf'
                 ]
             ],
+            'allow_output_buffering' => TRUE
         ]);
         $mpdf->AddFontDirectory(__DIR__ . '/../../www/fonts');
         $mpdf->AddFont('arial');
