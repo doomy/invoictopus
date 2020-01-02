@@ -1,0 +1,13 @@
+{
+    "name": "doomy/stringtools",
+    "description": "Simple helper library for various string operations",
+    "license": "MIT",
+    "autoload": {
+      "classmap": ["src/"]
+    },
+    "require": {
+		"php": ">= 7",
+        "ext-json": "*"
+	},
+	"minimum-stability": "stable"
+}

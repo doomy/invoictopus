@@ -1,13 +1,15 @@
 {
     "name": "doomy/repository",
-    "version": "2.0.0",
+    "description": "simple data model framework for dataprovider service",
+    "license": "MIT",
     "autoload": {
       "classmap": ["src/"]
     },
     "require": {
-		"php": ">= 5.6",
-		"dibi/dibi": "*",
-        "doomy/CustomDibi": ">= 1.0.2"
+		"php": ">= 7",
+		"dibi/dibi": ">=3.0",
+        "doomy/CustomDibi": "^1.0.2",
+        "doomy/stringtools": "^1.0.1"
 	},
 	"minimum-stability": "stable"
 }

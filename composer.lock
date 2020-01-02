@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "12c27e697ed036e061f78816a84ac4be",
+    "content-hash": "3f5f1fef25009e51a73e33c387656603",
     "packages": [
         {
             "name": "dibi/dibi",
@@ -215,22 +215,23 @@
         },
         {
             "name": "doomy/repository",
-            "version": "2.0.0",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doomy/repository.git",
-                "reference": "601dca9f6bb6cbcad88d42f9ef75534c0e3a6fd9"
+                "reference": "3f5c3f46669118003943f2c1cec4bf9f6d33e052"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doomy/repository/zipball/601dca9f6bb6cbcad88d42f9ef75534c0e3a6fd9",
-                "reference": "601dca9f6bb6cbcad88d42f9ef75534c0e3a6fd9",
+                "url": "https://api.github.com/repos/doomy/repository/zipball/3f5c3f46669118003943f2c1cec4bf9f6d33e052",
+                "reference": "3f5c3f46669118003943f2c1cec4bf9f6d33e052",
                 "shasum": ""
             },
             "require": {
-                "dibi/dibi": "*",
-                "doomy/customdibi": ">= 1.0.2",
-                "php": ">= 5.6"
+                "dibi/dibi": ">=3.0",
+                "doomy/customdibi": "^1.0.2",
+                "doomy/stringtools": "^1.0.1",
+                "php": ">= 7"
             },
             "type": "library",
             "autoload": {
@@ -239,7 +240,42 @@
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2019-09-03T10:18:39+00:00"
+            "license": [
+                "MIT"
+            ],
+            "description": "simple data model framework for dataprovider service",
+            "time": "2019-11-19T18:13:44+00:00"
+        },
+        {
+            "name": "doomy/stringtools",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doomy/stringtools.git",
+                "reference": "6b9cd82e94580a0e0cc3b66429ed77d37e93099b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doomy/stringtools/zipball/6b9cd82e94580a0e0cc3b66429ed77d37e93099b",
+                "reference": "6b9cd82e94580a0e0cc3b66429ed77d37e93099b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">= 7"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Simple helper library for various string operations",
+            "time": "2019-11-19T17:59:30+00:00"
         },
         {
             "name": "latte/latte",

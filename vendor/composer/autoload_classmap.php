@@ -79,6 +79,7 @@ return array(
     'Doomy\\ExtendedNetteForm\\DateInput' => $vendorDir . '/doomy/extended-nette-form/src/DateInput.php',
     'Doomy\\ExtendedNetteForm\\Form' => $vendorDir . '/doomy/extended-nette-form/src/Form.php',
     'Doomy\\ExtendedNetteForm\\LinkButton' => $vendorDir . '/doomy/extended-nette-form/src/LinkButton.php',
+    'Doomy\\Helper\\StringTools' => $vendorDir . '/doomy/stringtools/src/StringTools.php',
     'Doomy\\Migrator\\Migration' => $vendorDir . '/doomy/migrator/src/Migration.php',
     'Doomy\\Migrator\\Migrator' => $vendorDir . '/doomy/migrator/src/Migrator.php',
     'Doomy\\Repository\\EntityFactory' => $vendorDir . '/doomy/repository/src/EntityFactory.php',

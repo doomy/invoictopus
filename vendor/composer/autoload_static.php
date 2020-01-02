@@ -126,6 +126,7 @@ class ComposerStaticInit091ed5d24b4127ffc48411e34be2086f
         'Doomy\\ExtendedNetteForm\\DateInput' => __DIR__ . '/..' . '/doomy/extended-nette-form/src/DateInput.php',
         'Doomy\\ExtendedNetteForm\\Form' => __DIR__ . '/..' . '/doomy/extended-nette-form/src/Form.php',
         'Doomy\\ExtendedNetteForm\\LinkButton' => __DIR__ . '/..' . '/doomy/extended-nette-form/src/LinkButton.php',
+        'Doomy\\Helper\\StringTools' => __DIR__ . '/..' . '/doomy/stringtools/src/StringTools.php',
         'Doomy\\Migrator\\Migration' => __DIR__ . '/..' . '/doomy/migrator/src/Migration.php',
         'Doomy\\Migrator\\Migrator' => __DIR__ . '/..' . '/doomy/migrator/src/Migrator.php',
         'Doomy\\Repository\\EntityFactory' => __DIR__ . '/..' . '/doomy/repository/src/EntityFactory.php',
