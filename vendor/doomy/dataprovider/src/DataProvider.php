@@ -60,4 +60,8 @@ class DataProvider
         $this->entityCache->flush($entityClass);
         $repository->delete($where);
     }
+
+    public function create($entityClass, $values) {
+        return new $entityClass($values, $this->repoFactory);
+    }
 }

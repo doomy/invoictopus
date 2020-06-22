@@ -37,9 +37,8 @@ class InvoicePresenter extends Presenter
         $templateData = $this->getTemplateData();
         $html = $latte->renderToString(__DIR__ . '/../templates/invoice.latte', $templateData);
         $this->saveInvoice($templateData);
-        $response = new MpdfResponse($html);
 
-        $this->sendResponse($response);
+        $this->sendResponse(new MpdfResponse($html));
     }
 
     public function createComponentInvoiceForm() {
@@ -73,7 +72,7 @@ class InvoicePresenter extends Presenter
         $form->addDate('INVOICE_DATE')->setDefaultValue($invoiceDate);
         $form->addDate('TAXABLE_DATE')->setDefaultValue((new \DateTime())->modify("last day of previous month"));
         $form->addDate('DUE_DATE')->setDefaultValue($dueDate);
-        $items = $referenceInvoice->getItems();
+        $items = !empty($referenceInvoice) ? $referenceInvoice->getItems() : [];
         $item = array_shift($items);
         $form->addText('ITEM_NAME')->setDefaultValue($item->ITEM_NAME);
         $form->addInteger('ITEM_AMOUNT')->setDefaultValue($item->AMOUNT);
@@ -147,9 +146,15 @@ class InvoicePresenter extends Presenter
             return $this->lastInvoice;
         }
 
-        return $this->lastInvoice = $this->dataProvider->findOne(
+        $lastInvoice = $this->dataProvider->findOne(
             Invoice::class, [], 'ID DESC'
         );
+
+        if (empty($lastInvoice)) {
+            $lastInvoice = $this->dataProvider->create(Invoice::class, ['ID' => 0]);
+        }
+
+        return $this->lastInvoice = $lastInvoice;
     }
 
     private function calculateTotalPrice(int $amount, float $itemPrice, int $vatRate) {
