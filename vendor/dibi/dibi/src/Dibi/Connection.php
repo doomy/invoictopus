@@ -43,32 +43,21 @@ class Connection implements IConnection
 	 *   - lazy (bool) => if true, connection will be established only when required
 	 *   - result (array) => result set options
 	 *       - formatDateTime => date-time format (if empty, DateTime objects will be returned)
+	 *       - formatJson => json format (
+	 *           "string" for leaving value as is,
+	 *           "object" for decoding json as \stdClass,
+	 *           "array" for decoding json as an array - default
+	 *       )
 	 *   - profiler (array)
 	 *       - run (bool) => enable profiler?
 	 *       - file => file to log
+	 *       - errorsOnly (bool) => log only errors
 	 *   - substitutes (array) => map of driver specific substitutes (under development)
 	 *   - onConnect (array) => list of SQL queries to execute (by Connection::query()) after connection is established
-	 * @param  array   $config  connection parameters
 	 * @throws Exception
 	 */
-	public function __construct($config, string $name = null)
+	public function __construct(array $config, string $name = null)
 	{
-		if (is_string($config)) {
-			trigger_error(__METHOD__ . '() Configuration should be array.', E_USER_DEPRECATED);
-			parse_str($config, $config);
-
-		} elseif ($config instanceof Traversable) {
-			trigger_error(__METHOD__ . '() Configuration should be array.', E_USER_DEPRECATED);
-			$tmp = [];
-			foreach ($config as $key => $val) {
-				$tmp[$key] = $val instanceof Traversable ? iterator_to_array($val) : $val;
-			}
-			$config = $tmp;
-
-		} elseif (!is_array($config)) {
-			throw new \InvalidArgumentException('Configuration must be array.');
-		}
-
 		Helpers::alias($config, 'username', 'user');
 		Helpers::alias($config, 'password', 'pass');
 		Helpers::alias($config, 'host', 'hostname');
@@ -76,12 +65,14 @@ class Connection implements IConnection
 		Helpers::alias($config, 'result|formatDateTime', 'resultDateTime');
 		$config['driver'] = $config['driver'] ?? 'mysqli';
 		$config['name'] = $name;
+		$config['result']['formatJson'] = $config['result']['formatJson'] ?? 'array';
 		$this->config = $config;
 
 		// profiler
 		if (isset($config['profiler']['file']) && (!isset($config['profiler']['run']) || $config['profiler']['run'])) {
 			$filter = $config['profiler']['filter'] ?? Event::QUERY;
-			$this->onEvent[] = [new Loggers\FileLogger($config['profiler']['file'], $filter), 'logEvent'];
+			$errorsOnly = $config['profiler']['errorsOnly'] ?? false;
+			$this->onEvent[] = [new Loggers\FileLogger($config['profiler']['file'], $filter, $errorsOnly), 'logEvent'];
 		}
 
 		$this->substitutes = new HashMap(function (string $expr) { return ":$expr:"; });
@@ -119,6 +110,7 @@ class Connection implements IConnection
 	{
 		if ($this->config['driver'] instanceof Driver) {
 			$this->driver = $this->config['driver'];
+			$this->translator = new Translator($this);
 			return;
 
 		} elseif (is_subclass_of($this->config['driver'], Driver::class)) {
@@ -135,6 +127,8 @@ class Connection implements IConnection
 		$event = $this->onEvent ? new Event($this, Event::CONNECT) : null;
 		try {
 			$this->driver = new $class($this->config);
+			$this->translator = new Translator($this);
+
 			if ($event) {
 				$this->onEvent($event->done());
 			}
@@ -160,7 +154,7 @@ class Connection implements IConnection
 	{
 		if ($this->driver) {
 			$this->driver->disconnect();
-			$this->driver = null;
+			$this->driver = $this->translator = null;
 		}
 	}
 
@@ -261,11 +255,7 @@ class Connection implements IConnection
 		if (!$this->driver) {
 			$this->connect();
 		}
-		if (!$this->translator) {
-			$this->translator = new Translator($this);
-		}
-		$translator = clone $this->translator;
-		return $translator->translate($args);
+		return (clone $this->translator)->translate($args);
 	}
 
 
@@ -317,16 +307,6 @@ class Connection implements IConnection
 
 
 	/**
-	 * @deprecated
-	 */
-	public function affectedRows(): int
-	{
-		trigger_error(__METHOD__ . '() is deprecated, use getAffectedRows()', E_USER_DEPRECATED);
-		return $this->getAffectedRows();
-	}
-
-
-	/**
 	 * Retrieves the ID generated for an AUTO_INCREMENT column by the previous INSERT query.
 	 * @throws Exception
 	 */
@@ -336,20 +316,10 @@ class Connection implements IConnection
 			$this->connect();
 		}
 		$id = $this->driver->getInsertId($sequence);
-		if ($id < 1) {
+		if ($id === null) {
 			throw new Exception('Cannot retrieve last generated ID.');
 		}
 		return $id;
-	}
-
-
-	/**
-	 * @deprecated
-	 */
-	public function insertId(string $sequence = null): int
-	{
-		trigger_error(__METHOD__ . '() is deprecated, use getInsertId()', E_USER_DEPRECATED);
-		return $this->getInsertId($sequence);
 	}
 
 
@@ -432,7 +402,8 @@ class Connection implements IConnection
 	{
 		$res = new Result($resultDriver);
 		return $res->setFormat(Type::DATE, $this->config['result']['formatDate'])
-			->setFormat(Type::DATETIME, $this->config['result']['formatDateTime']);
+			->setFormat(Type::DATETIME, $this->config['result']['formatDateTime'])
+			->setFormat(Type::JSON, $this->config['result']['formatJson']);
 	}
 
 

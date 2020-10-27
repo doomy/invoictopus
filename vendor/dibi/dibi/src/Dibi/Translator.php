@@ -151,7 +151,7 @@ final class Translator
 			$sql[] = '*/';
 		}
 
-		$sql = implode(' ', $sql);
+		$sql = trim(implode(' ', $sql), ' ');
 
 		if ($this->errors) {
 			throw new Exception('SQL translate error: ' . trim(reset($this->errors), '*'), 0, $sql);
@@ -381,10 +381,11 @@ final class Translator
 				case 'dt': // datetime
 					if ($value === null) {
 						return 'NULL';
-					} else {
-						return $modifier === 'd' ? $this->driver->escapeDate($value) : $this->driver->escapeDateTime($value);
+					} elseif (!$value instanceof \DateTimeInterface) {
+						$value = new DateTime($value);
 					}
-					// break omitted
+					return $modifier === 'd' ? $this->driver->escapeDate($value) : $this->driver->escapeDateTime($value);
+
 				case 'by':
 				case 'n':  // composed identifier name
 					return $this->identifiers->$value;
@@ -414,12 +415,15 @@ final class Translator
 					return (string) $value;
 
 				case 'like~':  // LIKE string%
-					return $this->driver->escapeLike($value, 1);
+					return $this->driver->escapeLike($value, 2);
 
 				case '~like':  // LIKE %string
-					return $this->driver->escapeLike($value, -1);
+					return $this->driver->escapeLike($value, 1);
 
 				case '~like~': // LIKE %string%
+					return $this->driver->escapeLike($value, 3);
+
+				case 'like': // LIKE string
 					return $this->driver->escapeLike($value, 0);
 
 				case 'and':
@@ -454,6 +458,9 @@ final class Translator
 
 		} elseif ($value instanceof \DateTimeInterface) {
 			return $this->driver->escapeDateTime($value);
+
+		} elseif ($value instanceof \DateInterval) {
+			return $this->driver->escapeDateInterval($value);
 
 		} elseif ($value instanceof Literal) {
 			return (string) $value;

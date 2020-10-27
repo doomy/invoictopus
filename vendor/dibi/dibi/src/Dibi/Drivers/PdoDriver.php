@@ -42,9 +42,7 @@ class PdoDriver implements Dibi\Driver
 	private $serverVersion = '';
 
 
-	/**
-	 * @throws Dibi\NotSupportedException
-	 */
+	/** @throws Dibi\NotSupportedException */
 	public function __construct(array $config)
 	{
 		if (!extension_loaded('pdo')) {
@@ -289,26 +287,14 @@ class PdoDriver implements Dibi\Driver
 	}
 
 
-	/**
-	 * @param  \DateTimeInterface|string|int  $value
-	 */
-	public function escapeDate($value): string
+	public function escapeDate(\DateTimeInterface $value): string
 	{
-		if (!$value instanceof \DateTimeInterface) {
-			$value = new Dibi\DateTime($value);
-		}
 		return $value->format($this->driverName === 'odbc' ? '#m/d/Y#' : "'Y-m-d'");
 	}
 
 
-	/**
-	 * @param  \DateTimeInterface|string|int  $value
-	 */
-	public function escapeDateTime($value): string
+	public function escapeDateTime(\DateTimeInterface $value): string
 	{
-		if (!$value instanceof \DateTimeInterface) {
-			$value = new Dibi\DateTime($value);
-		}
 		switch ($this->driverName) {
 			case 'odbc':
 				return $value->format('#m/d/Y H:i:s.u#');
@@ -322,6 +308,12 @@ class PdoDriver implements Dibi\Driver
 	}
 
 
+	public function escapeDateInterval(\DateInterval $value): string
+	{
+		throw new Dibi\NotImplementedException;
+	}
+
+
 	/**
 	 * Encodes string for use in a LIKE statement.
 	 */
@@ -330,29 +322,29 @@ class PdoDriver implements Dibi\Driver
 		switch ($this->driverName) {
 			case 'mysql':
 				$value = addcslashes(str_replace('\\', '\\\\', $value), "\x00\n\r\\'%_");
-				return ($pos <= 0 ? "'%" : "'") . $value . ($pos >= 0 ? "%'" : "'");
+				return ($pos & 1 ? "'%" : "'") . $value . ($pos & 2 ? "%'" : "'");
 
 			case 'oci':
 				$value = addcslashes(str_replace('\\', '\\\\', $value), "\x00\\%_");
 				$value = str_replace("'", "''", $value);
-				return ($pos <= 0 ? "'%" : "'") . $value . ($pos >= 0 ? "%'" : "'");
+				return ($pos & 1 ? "'%" : "'") . $value . ($pos & 2 ? "%'" : "'");
 
 			case 'pgsql':
 				$bs = substr($this->connection->quote('\\', PDO::PARAM_STR), 1, -1); // standard_conforming_strings = on/off
 				$value = substr($this->connection->quote($value, PDO::PARAM_STR), 1, -1);
 				$value = strtr($value, ['%' => $bs . '%', '_' => $bs . '_', '\\' => '\\\\']);
-				return ($pos <= 0 ? "'%" : "'") . $value . ($pos >= 0 ? "%'" : "'");
+				return ($pos & 1 ? "'%" : "'") . $value . ($pos & 2 ? "%'" : "'");
 
 			case 'sqlite':
 				$value = addcslashes(substr($this->connection->quote($value, PDO::PARAM_STR), 1, -1), '%_\\');
-				return ($pos <= 0 ? "'%" : "'") . $value . ($pos >= 0 ? "%'" : "'") . " ESCAPE '\\'";
+				return ($pos & 1 ? "'%" : "'") . $value . ($pos & 2 ? "%'" : "'") . " ESCAPE '\\'";
 
 			case 'odbc':
 			case 'mssql':
 			case 'dblib':
 			case 'sqlsrv':
 				$value = strtr($value, ["'" => "''", '%' => '[%]', '_' => '[_]', '[' => '[[]']);
-				return ($pos <= 0 ? "'%" : "'") . $value . ($pos >= 0 ? "%'" : "'");
+				return ($pos & 1 ? "'%" : "'") . $value . ($pos & 2 ? "%'" : "'");
 
 			default:
 				throw new Dibi\NotImplementedException;
@@ -373,7 +365,7 @@ class PdoDriver implements Dibi\Driver
 			case 'mysql':
 				if ($limit !== null || $offset) {
 					// see http://dev.mysql.com/doc/refman/5.0/en/select.html
-					$sql .= ' LIMIT ' . ($limit === null ? '18446744073709551615' : $limit)
+					$sql .= ' LIMIT ' . ($limit ?? '18446744073709551615')
 						. ($offset ? ' OFFSET ' . $offset : '');
 				}
 				break;
@@ -389,7 +381,7 @@ class PdoDriver implements Dibi\Driver
 
 			case 'sqlite':
 				if ($limit !== null || $offset) {
-					$sql .= ' LIMIT ' . ($limit === null ? '-1' : $limit)
+					$sql .= ' LIMIT ' . ($limit ?? '-1')
 						. ($offset ? ' OFFSET ' . $offset : '');
 				}
 				break;

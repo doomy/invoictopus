@@ -20,13 +20,13 @@ class Form extends UIForm
 
     public function addDate($name, $label = null)
     {
-        if (!$label) $label = DbHelper::normalizeNameFromDB($name);
+        if (!isset($label)) $label = DbHelper::normalizeNameFromDB($name);
         return $this[$name] = new DateInput($label);
     }
 
     public function addText($name, $label = null, $cols = NULL, $maxLength = NULL): TextInput
     {
-        if (!$label) $label = DbHelper::normalizeNameFromDB($name);
+        if (!isset($label)) $label = DbHelper::normalizeNameFromDB($name);
         $text = parent::addText($name, $label, $cols, $maxLength);
         $text->setAttribute('class', 'form-control');
         return $text;
@@ -34,7 +34,7 @@ class Form extends UIForm
 
     public function addEmail($name, $label = null, $cols = NULL, $maxLength = NULL): TextInput
     {
-        if (!$label) $label = DbHelper::normalizeNameFromDB($name);
+        if (!isset($label)) $label = DbHelper::normalizeNameFromDB($name);
         $email = parent::addText($name, $label, $cols, $maxLength);
         $email->setAttribute('class', 'form-control');
         return $email;
@@ -70,7 +70,7 @@ class Form extends UIForm
 
     public function addInteger($name, $label = null, $cols = NULL, $maxLength = NULL): TextInput
     {
-        if (!$label) $label = DbHelper::normalizeNameFromDB($name);
+        if (!isset($label)) $label = DbHelper::normalizeNameFromDB($name);
         $integer = parent::addInteger($name, $label, $cols, $maxLength);
         $integer->setAttribute('class', 'form-control');
         return $integer;

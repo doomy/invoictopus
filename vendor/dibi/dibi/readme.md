@@ -26,7 +26,7 @@ Install Dibi via Composer:
 composer require dibi/dibi
 ```
 
-The Dibi 4.0 requires PHP version 7.1 and supports PHP up to 7.2. Older Dibi 3.x requires PHP 5.4 and supports PHP up to 7.2.
+The Dibi 4.1 requires PHP version 7.1 and supports PHP up to 7.4.
 
 
 Usage
@@ -75,6 +75,8 @@ In the event of a connection error, it throws `Dibi\Exception`.
 
 We query the database queries by the method `query()` which returns `Dibi\Result`. Rows are objects `Dibi\Row`.
 
+You can try all the examples [online at the playground](https://repl.it/@DavidGrudl/dibi-playground).
+
 ```php
 $result = $database->query('SELECT * FROM users');
 
@@ -110,7 +112,7 @@ $ids = [10, 20, 30];
 $result = $database->query('SELECT * FROM users WHERE id IN (?)', $ids);
 ```
 
-**WARNING, never concencate parameters to SQL, the vulnerability would arise [SQL injection](https://en.wikipedia.org/wiki/SQL_injection)**
+**WARNING: Never concatenate parameters to SQL. It would create a [SQL injection](https://en.wikipedia.org/wiki/SQL_injection)** vulnerability.
 ```
 $result = $database->query('SELECT * FROM users WHERE id = ' . $id); // BAD!!!
 ```
@@ -147,7 +149,7 @@ $name = $database->fetchSingle('SELECT name FROM users WHERE id = ?', $id);
 
 ### Modifiers
 
-In addition to the `?` wild char, we can also use modifiers:
+In addition to the `?` wildcard char, we can also use modifiers:
 
 | modifier | description
 |----------|-----
@@ -161,6 +163,7 @@ In addition to the `?` wild char, we can also use modifiers:
 | %d | date (accepts DateTime, string or UNIX timestamp)
 | %dt | datetime (accepts DateTime, string or UNIX timestamp)
 | %n | identifier, ie the name of the table or column
+| %N | identifier, treats period as a common character, ie alias or a database name (`%n AS %N` or `DROP DATABASE %N`)
 | %SQL | SQL - directly inserts into SQL (the alternative is Dibi\Literal)
 | %ex | SQL expression or array of expressions
 | %lmt | special - adds LIMIT to the query
@@ -182,7 +185,7 @@ $result = $database->query('SELECT * FROM users WHERE id IN (%i)', $ids);
 // SELECT * FROM users WHERE id IN (10, 20, 30)
 ```
 
-The modifier '%n' is used if the table or column name is a variable. (Beware, do not allow the user to manipulate the content of such a variable):
+The modifier `%n` is used if the table or column name is a variable. (Beware, do not allow the user to manipulate the content of such a variable):
 
 ```php
 $table = 'blog.users';
@@ -198,6 +201,7 @@ Three special modifiers are available for LIKE:
 | `%like~` | the expression starts with a string
 | `%~like` | the expression ends with a string
 | `%~like~` | the expression contains a string
+| `%like` | the expression matches a string
 
 Search for names beginning with a string:
 

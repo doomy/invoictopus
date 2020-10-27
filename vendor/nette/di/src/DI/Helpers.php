@@ -42,6 +42,11 @@ final class Helpers
 		} elseif ($var instanceof Statement) {
 			return new Statement(self::expand($var->getEntity(), $params, $recursive), self::expand($var->arguments, $params, $recursive));
 
+		} elseif ($var === '%parameters%' && !array_key_exists('parameters', $params)) {
+			return $recursive
+				? self::expand($params, $params, (is_array($recursive) ? $recursive : []))
+				: $params;
+
 		} elseif (!is_string($var)) {
 			return $var;
 		}
@@ -171,7 +176,7 @@ final class Helpers
 				return null;
 			} elseif ($func instanceof \ReflectionMethod) {
 				return $type === 'static' || $type === '$this'
-					? $func->getDeclaringClass()->getName()
+					? $func->getDeclaringClass()->name
 					: Reflection::expandClassName($type, $func->getDeclaringClass());
 			} else {
 				return $type;
@@ -184,7 +189,7 @@ final class Helpers
 	public static function normalizeClass(string $type): string
 	{
 		return class_exists($type) || interface_exists($type)
-			? (new \ReflectionClass($type))->getName()
+			? (new \ReflectionClass($type))->name
 			: $type;
 	}
 }

@@ -35,9 +35,7 @@ class PostgreDriver implements Dibi\Driver
 	private $affectedRows;
 
 
-	/**
-	 * @throws Dibi\NotSupportedException
-	 */
+	/** @throws Dibi\NotSupportedException */
 	public function __construct(array $config)
 	{
 		if (!extension_loaded('pgsql')) {
@@ -71,7 +69,7 @@ class PostgreDriver implements Dibi\Driver
 			if (empty($config['persistent'])) {
 				$this->connection = pg_connect($string, PGSQL_CONNECT_FORCE_NEW);
 			} else {
-				$this->connection = pg_pconnect($string, PGSQL_CONNECT_FORCE_NEW);
+				$this->connection = pg_pconnect($string);
 			}
 			restore_error_handler();
 		}
@@ -292,27 +290,21 @@ class PostgreDriver implements Dibi\Driver
 	}
 
 
-	/**
-	 * @param  \DateTimeInterface|string|int  $value
-	 */
-	public function escapeDate($value): string
+	public function escapeDate(\DateTimeInterface $value): string
 	{
-		if (!$value instanceof \DateTimeInterface) {
-			$value = new Dibi\DateTime($value);
-		}
 		return $value->format("'Y-m-d'");
 	}
 
 
-	/**
-	 * @param  \DateTimeInterface|string|int  $value
-	 */
-	public function escapeDateTime($value): string
+	public function escapeDateTime(\DateTimeInterface $value): string
 	{
-		if (!$value instanceof \DateTimeInterface) {
-			$value = new Dibi\DateTime($value);
-		}
 		return $value->format("'Y-m-d H:i:s.u'");
+	}
+
+
+	public function escapeDateInterval(\DateInterval $value): string
+	{
+		throw new Dibi\NotImplementedException;
 	}
 
 
@@ -324,7 +316,7 @@ class PostgreDriver implements Dibi\Driver
 		$bs = pg_escape_string($this->connection, '\\'); // standard_conforming_strings = on/off
 		$value = pg_escape_string($this->connection, $value);
 		$value = strtr($value, ['%' => $bs . '%', '_' => $bs . '_', '\\' => '\\\\']);
-		return ($pos <= 0 ? "'%" : "'") . $value . ($pos >= 0 ? "%'" : "'");
+		return ($pos & 1 ? "'%" : "'") . $value . ($pos & 2 ? "%'" : "'");
 	}
 
 

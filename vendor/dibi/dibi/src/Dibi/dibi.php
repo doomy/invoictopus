@@ -44,7 +44,7 @@ class dibi
 
 	/** version */
 	public const
-		VERSION = '4.0.2';
+		VERSION = '4.1.3';
 
 	/** sorting order */
 	public const
@@ -142,26 +142,6 @@ class dibi
 	public static function __callStatic(string $name, array $args)
 	{
 		return self::getConnection()->$name(...$args);
-	}
-
-
-	/**
-	 * @deprecated
-	 */
-	public static function affectedRows(): int
-	{
-		trigger_error(__METHOD__ . '() is deprecated, use getAffectedRows()', E_USER_DEPRECATED);
-		return self::getConnection()->getAffectedRows();
-	}
-
-
-	/**
-	 * @deprecated
-	 */
-	public static function insertId(string $sequence = null): int
-	{
-		trigger_error(__METHOD__ . '() is deprecated, use getInsertId()', E_USER_DEPRECATED);
-		return self::getConnection()->getInsertId($sequence);
 	}
 
 

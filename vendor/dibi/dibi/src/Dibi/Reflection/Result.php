@@ -28,7 +28,7 @@ class Result
 	/** @var Column[]|null */
 	private $columns;
 
-	/** @var string[]|null */
+	/** @var Column[]|null */
 	private $names;
 
 
@@ -38,9 +38,7 @@ class Result
 	}
 
 
-	/**
-	 * @return Column[]
-	 */
+	/** @return Column[] */
 	public function getColumns(): array
 	{
 		$this->initColumns();
@@ -48,9 +46,7 @@ class Result
 	}
 
 
-	/**
-	 * @return string[]
-	 */
+	/** @return string[] */
 	public function getColumnNames(bool $fullNames = false): array
 	{
 		$this->initColumns();

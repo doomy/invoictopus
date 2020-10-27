@@ -124,6 +124,7 @@ class InvoicePresenter extends Presenter
             'taxableDate' => $this->getHttpRequest()->getPost('TAXABLE_DATE'),
             'dueDate' => $this->getHttpRequest()->getPost('DUE_DATE'),
             'invoicedItems' => [
+
                 [
                     'item' => $this->getHttpRequest()->getPost('ITEM_NAME'),
                     'amount' => $itemAmount,
@@ -131,7 +132,7 @@ class InvoicePresenter extends Presenter
                     'vatRate' => $itemVatRate,
                     'total' => $itemTotalPrice,
                     'currency' => 'CZK',
-                ],
+                ]
             ],
             'total' => [
                 'amount' => $itemTotalPrice,

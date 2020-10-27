@@ -1,6 +1,5 @@
 {
     "name": "doomy/extended-nette-form",
-    "version": "2.2.1",
     "autoload": {
       "classmap": ["src/"]
     },
