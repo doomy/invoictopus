@@ -15,6 +15,7 @@ use Nette\ComponentModel\IComponent;
 class InvoicePresenter extends Presenter
 {
     private $lastInvoice;
+    private int $itemCount = 3;
 
     /**
      * @var DataProvider
@@ -74,10 +75,14 @@ class InvoicePresenter extends Presenter
         $form->addDate('DUE_DATE')->setDefaultValue($dueDate);
         $items = !empty($referenceInvoice) ? $referenceInvoice->getItems() : [];
         $item = array_shift($items);
-        $form->addText('ITEM_NAME')->setDefaultValue($item->ITEM_NAME);
-        $form->addInteger('ITEM_AMOUNT')->setDefaultValue($item->AMOUNT);
-        $form->addInteger('ITEM_PRICE')->setDefaultValue($item->PRICE);
-        $form->addInteger('ITEM_VAT_RATE', 'VAT rate(%)')->setDefaultValue($item->VAT_RATE);
+        $itemsContainer = $form->addContainer('ITEMS');
+        for ($i = 1; $i <= $this->itemCount; $i++) {
+            $itemContainer = $itemsContainer->addContainer((string) $i-1);
+            $itemContainer->addText('NAME')->setDefaultValue($item->ITEM_NAME);
+            $itemContainer->addInteger('AMOUNT')->setDefaultValue($item->AMOUNT);
+            $itemContainer->addInteger('PRICE')->setDefaultValue($item->PRICE);
+            $itemContainer->addInteger('VAT_RATE', 'VAT rate(%)')->setDefaultValue($item->VAT_RATE);
+        }
         $form->addSubmit('Generate', 'Generate');
 
         return $form;
@@ -101,10 +106,11 @@ class InvoicePresenter extends Presenter
 
     private function getTemplateData(): array
     {
-        $itemAmount = (int)$this->getHttpRequest()->getPost('ITEM_AMOUNT');
+        /*$itemAmount = (int)$this->getHttpRequest()->getPost('ITEM_AMOUNT');
         $itemPrice = (float)$this->getHttpRequest()->getPost('ITEM_PRICE');
         $itemVatRate = $this->getHttpRequest()->getPost('ITEM_VAT_RATE');
-        $itemTotalPrice = $this->calculateTotalPrice($itemAmount, $itemPrice, $itemVatRate);
+        $itemTotalPrice = $this->calculateTotalPrice($itemAmount, $itemPrice, $itemVatRate);*/
+        $invoiceItems = $this->getInvoiceItems();
 
         return [
             'basePath' => $this->getHttpRequest()->getUrl()->getBasePath(),
@@ -123,19 +129,9 @@ class InvoicePresenter extends Presenter
             'invoiceDate' => $this->getHttpRequest()->getPost('INVOICE_DATE'),
             'taxableDate' => $this->getHttpRequest()->getPost('TAXABLE_DATE'),
             'dueDate' => $this->getHttpRequest()->getPost('DUE_DATE'),
-            'invoicedItems' => [
-
-                [
-                    'item' => $this->getHttpRequest()->getPost('ITEM_NAME'),
-                    'amount' => $itemAmount,
-                    'price' => $itemPrice,
-                    'vatRate' => $itemVatRate,
-                    'total' => $itemTotalPrice,
-                    'currency' => 'CZK',
-                ]
-            ],
+            'invoicedItems' => $invoiceItems,
             'total' => [
-                'amount' => $itemTotalPrice,
+                'amount' => $this->calculateItemsTotalPrice($invoiceItems),
                 'currency' => 'CZK',
             ],
         ];
@@ -164,7 +160,7 @@ class InvoicePresenter extends Presenter
             $itemPrice += $vat;
         }
 
-        return $itemPrice;
+        return $amount * $itemPrice;
     }
 
     private function saveInvoice(array $invoiceData) {
@@ -201,6 +197,33 @@ class InvoicePresenter extends Presenter
                 ]
             );
         }
+    }
+
+    private function getInvoiceItems(): array
+    {
+        $items = [];
+        foreach ($this->getHttpRequest()->getPost('ITEMS') as $item) {
+            $items[] = [
+                'item' => $item['NAME'],
+                'amount' => $item['AMOUNT'],
+                'price' => $item['PRICE'],
+                'vatRate' => $item['VAT_RATE'],
+                'total' => $this->calculateTotalPrice($item['AMOUNT'], $item['PRICE'], $item['VAT_RATE']),
+                'currency' => 'CZK'
+            ];
+        }
+        return $items;
+    }
+
+    private function calculateItemsTotalPrice(array $items): float
+    {
+        $sum = (float) 0;
+
+        foreach ($items as $item) {
+            $sum += (float) $item['total'];
+        }
+
+        return $sum;
     }
 
 }
