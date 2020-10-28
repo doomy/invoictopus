@@ -106,10 +106,6 @@ class InvoicePresenter extends Presenter
 
     private function getTemplateData(): array
     {
-        /*$itemAmount = (int)$this->getHttpRequest()->getPost('ITEM_AMOUNT');
-        $itemPrice = (float)$this->getHttpRequest()->getPost('ITEM_PRICE');
-        $itemVatRate = $this->getHttpRequest()->getPost('ITEM_VAT_RATE');
-        $itemTotalPrice = $this->calculateTotalPrice($itemAmount, $itemPrice, $itemVatRate);*/
         $invoiceItems = $this->getInvoiceItems();
 
         return [
