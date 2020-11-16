@@ -15,7 +15,7 @@ use Nette\ComponentModel\IComponent;
 class InvoicePresenter extends Presenter
 {
     private $lastInvoice;
-    private int $itemCount = 3;
+    private int $itemCount = 1;
 
     /**
      * @var DataProvider
