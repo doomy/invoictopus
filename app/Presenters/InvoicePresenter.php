@@ -2,6 +2,7 @@
 
 namespace App\Presenters;
 
+use Doomy\Helper\StringTools;
 use Invoictopus\Invoice\Invoice;
 use Invoictopus\Invoice\Item;
 use Invoictopus\Response\MpdfResponse;
@@ -39,7 +40,7 @@ class InvoicePresenter extends Presenter
         $html = $latte->renderToString(__DIR__ . '/../templates/invoice.latte', $templateData);
         $this->saveInvoice($templateData);
 
-        $this->sendResponse(new MpdfResponse($html));
+        $this->sendResponse(new MpdfResponse($html, $this->assembleInvoiceFilename($templateData)));
     }
 
     public function createComponentInvoiceForm() {
@@ -220,6 +221,18 @@ class InvoicePresenter extends Presenter
         }
 
         return $sum;
+    }
+
+    private function assembleInvoiceFilename(array $templateData): string
+    {
+        $invoiceDate = new \DateTime($templateData['invoiceDate']);
+
+        return sprintf(
+            '%s-%s-%s.pdf',
+            sprintf('%04d', $templateData['invoiceNr']),
+            $invoiceDate->format('Y-m-d'),
+            strtolower(StringTools::normalizeStringForUri($templateData['customerName']))
+        );
     }
 
 }

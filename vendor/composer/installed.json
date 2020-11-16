@@ -252,26 +252,26 @@
     },
     {
         "name": "doomy/repository",
-        "version": "3.0.5",
-        "version_normalized": "3.0.5.0",
+        "version": "3.2.2",
+        "version_normalized": "3.2.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/doomy/repository.git",
-            "reference": "18f753b89835675b0cf69dcd1b39689b653d82ad"
+            "reference": "19bd761dc042cafb3c88e0f0c63d75b14512671c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/doomy/repository/zipball/18f753b89835675b0cf69dcd1b39689b653d82ad",
-            "reference": "18f753b89835675b0cf69dcd1b39689b653d82ad",
+            "url": "https://api.github.com/repos/doomy/repository/zipball/19bd761dc042cafb3c88e0f0c63d75b14512671c",
+            "reference": "19bd761dc042cafb3c88e0f0c63d75b14512671c",
             "shasum": ""
         },
         "require": {
             "dibi/dibi": ">=3.0",
             "doomy/customdibi": "^1.0.2",
-            "doomy/stringtools": "^1.0.1",
-            "php": ">= 7"
+            "doomy/stringtools": "^2.0.0",
+            "php": ">= 7.4"
         },
-        "time": "2020-06-24T19:26:18+00:00",
+        "time": "2020-11-16T10:31:59+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -287,24 +287,24 @@
     },
     {
         "name": "doomy/stringtools",
-        "version": "1.0.1",
-        "version_normalized": "1.0.1.0",
+        "version": "2.0.0",
+        "version_normalized": "2.0.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/doomy/stringtools.git",
-            "reference": "6b9cd82e94580a0e0cc3b66429ed77d37e93099b"
+            "reference": "778d1ad96a7cb3de74b05a177eb4fea2cff6f51c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/doomy/stringtools/zipball/6b9cd82e94580a0e0cc3b66429ed77d37e93099b",
-            "reference": "6b9cd82e94580a0e0cc3b66429ed77d37e93099b",
+            "url": "https://api.github.com/repos/doomy/stringtools/zipball/778d1ad96a7cb3de74b05a177eb4fea2cff6f51c",
+            "reference": "778d1ad96a7cb3de74b05a177eb4fea2cff6f51c",
             "shasum": ""
         },
         "require": {
             "ext-json": "*",
-            "php": ">= 7"
+            "php": ">= 7.1"
         },
-        "time": "2019-11-19T17:59:30+00:00",
+        "time": "2020-11-16T09:38:52+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

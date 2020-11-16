@@ -24,16 +24,7 @@
 		"doomy/dataprovider": ">=1.0.1",
 		"doomy/migrator": ">=1.0.5",
 		"doomy/extended-nette-form": "^2.2.1",
-		"doomy/repository": ">=2.0.0"
-	},
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/api2pdf/api2pdf.php"
-		}
-	],
-	"require-dev": {
-		"nette/tester": "^2.0"
+		"doomy/repository": "^3.2.2"
 	},
 	"autoload": {
 		"classmap": ["app/Bootstrap.php"]

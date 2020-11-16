@@ -5,15 +5,17 @@ namespace Invoictopus\Response;
 use Mpdf\Config\FontVariables;
 use Mpdf\Mpdf;
 use Mpdf\Config\ConfigVariables;
+use Mpdf\Output\Destination;
 
 class MpdfResponse implements \Nette\Application\IResponse
 {
     private $html;
+    private ?string $filename;
 
-
-    public function __construct(string $html)
+    public function __construct(string $html, ?string $filename = NULL)
     {
         $this->html = $html;
+        $this->filename = $filename;
     }
 
     public function send(\Nette\Http\IRequest $httpRequest, \Nette\Http\IResponse $httpResponse): void
@@ -43,6 +45,6 @@ class MpdfResponse implements \Nette\Application\IResponse
         $mpdf->AddFont('arial');
         $mpdf->SetFont('Arial');
         @$mpdf->WriteHtml($this->html);
-        $mpdf->Output(/*__DIR__ . '/../../www/upload/' . time() . ".pdf"*/);
+        $mpdf->Output($this->filename, Destination::INLINE);
     }
 }

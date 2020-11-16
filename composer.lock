@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ec4981c3f7d6ef4b9230cec1ef9ddf9",
+    "content-hash": "6b1f22f97bcff27935669bb2167d9261",
     "packages": [
         {
             "name": "dibi/dibi",
@@ -245,23 +245,23 @@
         },
         {
             "name": "doomy/repository",
-            "version": "3.0.5",
+            "version": "3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doomy/repository.git",
-                "reference": "18f753b89835675b0cf69dcd1b39689b653d82ad"
+                "reference": "19bd761dc042cafb3c88e0f0c63d75b14512671c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doomy/repository/zipball/18f753b89835675b0cf69dcd1b39689b653d82ad",
-                "reference": "18f753b89835675b0cf69dcd1b39689b653d82ad",
+                "url": "https://api.github.com/repos/doomy/repository/zipball/19bd761dc042cafb3c88e0f0c63d75b14512671c",
+                "reference": "19bd761dc042cafb3c88e0f0c63d75b14512671c",
                 "shasum": ""
             },
             "require": {
                 "dibi/dibi": ">=3.0",
                 "doomy/customdibi": "^1.0.2",
-                "doomy/stringtools": "^1.0.1",
-                "php": ">= 7"
+                "doomy/stringtools": "^2.0.0",
+                "php": ">= 7.4"
             },
             "type": "library",
             "autoload": {
@@ -274,25 +274,25 @@
                 "MIT"
             ],
             "description": "simple data model framework for dataprovider service",
-            "time": "2020-06-24T19:26:18+00:00"
+            "time": "2020-11-16T10:31:59+00:00"
         },
         {
             "name": "doomy/stringtools",
-            "version": "1.0.1",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doomy/stringtools.git",
-                "reference": "6b9cd82e94580a0e0cc3b66429ed77d37e93099b"
+                "reference": "778d1ad96a7cb3de74b05a177eb4fea2cff6f51c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doomy/stringtools/zipball/6b9cd82e94580a0e0cc3b66429ed77d37e93099b",
-                "reference": "6b9cd82e94580a0e0cc3b66429ed77d37e93099b",
+                "url": "https://api.github.com/repos/doomy/stringtools/zipball/778d1ad96a7cb3de74b05a177eb4fea2cff6f51c",
+                "reference": "778d1ad96a7cb3de74b05a177eb4fea2cff6f51c",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": ">= 7"
+                "php": ">= 7.1"
             },
             "type": "library",
             "autoload": {
@@ -305,7 +305,7 @@
                 "MIT"
             ],
             "description": "Simple helper library for various string operations",
-            "time": "2019-11-19T17:59:30+00:00"
+            "time": "2020-11-16T09:38:52+00:00"
         },
         {
             "name": "latte/latte",
@@ -1583,6 +1583,73 @@
             "time": "2020-05-27T10:36:31+00:00"
         },
         {
+            "name": "nette/tester",
+            "version": "v2.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nette/tester.git",
+                "reference": "793aa4bb87872319902a569ed84a64844fdc1549"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nette/tester/zipball/793aa4bb87872319902a569ed84a64844fdc1549",
+                "reference": "793aa4bb87872319902a569ed84a64844fdc1549",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "ext-simplexml": "*",
+                "phpstan/phpstan": "^0.12"
+            },
+            "bin": [
+                "src/tester"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.4-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0-only",
+                "GPL-3.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "https://davidgrudl.com"
+                },
+                {
+                    "name": "Nette Community",
+                    "homepage": "https://nette.org/contributors"
+                }
+            ],
+            "description": "Nette Tester: enjoyable unit testing in PHP with code coverage reporter. 🍏🍏🍎🍏",
+            "homepage": "https://tester.nette.org",
+            "keywords": [
+                "Xdebug",
+                "assertions",
+                "clover",
+                "code coverage",
+                "nette",
+                "pcov",
+                "phpdbg",
+                "phpunit",
+                "testing",
+                "unit"
+            ],
+            "time": "2020-03-06T15:55:57+00:00"
+        },
+        {
             "name": "nette/utils",
             "version": "v3.1.2",
             "source": {
@@ -1893,75 +1960,7 @@
             "time": "2020-05-17T09:50:45+00:00"
         }
     ],
-    "packages-dev": [
-        {
-            "name": "nette/tester",
-            "version": "v2.3.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nette/tester.git",
-                "reference": "793aa4bb87872319902a569ed84a64844fdc1549"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nette/tester/zipball/793aa4bb87872319902a569ed84a64844fdc1549",
-                "reference": "793aa4bb87872319902a569ed84a64844fdc1549",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1"
-            },
-            "require-dev": {
-                "ext-simplexml": "*",
-                "phpstan/phpstan": "^0.12"
-            },
-            "bin": [
-                "src/tester"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.4-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause",
-                "GPL-2.0-only",
-                "GPL-3.0-only"
-            ],
-            "authors": [
-                {
-                    "name": "David Grudl",
-                    "homepage": "https://davidgrudl.com"
-                },
-                {
-                    "name": "Nette Community",
-                    "homepage": "https://nette.org/contributors"
-                }
-            ],
-            "description": "Nette Tester: enjoyable unit testing in PHP with code coverage reporter. 🍏🍏🍎🍏",
-            "homepage": "https://tester.nette.org",
-            "keywords": [
-                "Xdebug",
-                "assertions",
-                "clover",
-                "code coverage",
-                "nette",
-                "pcov",
-                "phpdbg",
-                "phpunit",
-                "testing",
-                "unit"
-            ],
-            "time": "2020-03-06T15:55:57+00:00"
-        }
-    ],
+    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
