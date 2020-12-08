@@ -17,5 +17,5 @@ services:
 	entityFactory: Doomy\Repository\EntityFactory(@connection)
 	repoFactory: Doomy\Repository\RepoFactory(@connection, @entityFactory)
 	entityCache: Doomy\EntityCache\EntityCache
-	dataProvider: Doomy\DataProvider\DataProvider(@repoFactory, @entityCache)
-	migrator: Doomy\Migrator\Migrator(@connection, @dataProvider, %migrator%)
+	data: Doomy\Ormtopus\DataEntityManager
+	migrator: Doomy\Migrator\Migrator(@connection, @data, %migrator%)

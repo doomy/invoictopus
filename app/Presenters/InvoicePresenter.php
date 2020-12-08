@@ -3,6 +3,7 @@
 namespace App\Presenters;
 
 use Doomy\Helper\StringTools;
+use Doomy\Ormtopus\DataEntityManager;
 use Invoictopus\Invoice\Invoice;
 use Invoictopus\Invoice\Item;
 use Invoictopus\Response\MpdfResponse;
@@ -10,7 +11,6 @@ use Invoictopus\TemplateFilter\Price;
 use Latte\Engine as LatteEngine;
 use Doomy\ExtendedNetteForm\Form;
 use Nette\Application\UI\Presenter;
-use Doomy\DataProvider\DataProvider;
 use Nette\ComponentModel\IComponent;
 
 class InvoicePresenter extends Presenter
@@ -18,14 +18,11 @@ class InvoicePresenter extends Presenter
     private $lastInvoice;
     private int $itemCount = 1;
 
-    /**
-     * @var DataProvider
-     */
-    private $dataProvider;
+    private DataEntityManager $data;
 
-    public function __construct(DataProvider $dataProvider)
+    public function __construct(DataEntityManager $data)
     {
-        $this->dataProvider = $dataProvider;
+        $this->data = $data;
     }
 
     public function renderForm() {
@@ -52,7 +49,7 @@ class InvoicePresenter extends Presenter
         $lastInvoice = $this->getLastInvoice();
         $referenceInvoice = NULL;
         if (isset($_POST['invoice_id'])) {
-            $referenceInvoice = $this->dataProvider->findById(Invoice::class, $_POST['invoice_id']);
+            $referenceInvoice = $this->data->findById(Invoice::class, $_POST['invoice_id']);
         }
         if (empty($referenceInvoice)) {
             $referenceInvoice = $lastInvoice;
@@ -91,7 +88,7 @@ class InvoicePresenter extends Presenter
 
     public function createComponentInvoiceTemplateForm(): ?IComponent
     {
-        $invoices = $this->dataProvider->findAll(Invoice::class);
+        $invoices = $this->data->findAll(Invoice::class);
         $items = [];
         /** @var Invoice $invoice */
         foreach ($invoices as $invoice) {
@@ -140,12 +137,12 @@ class InvoicePresenter extends Presenter
             return $this->lastInvoice;
         }
 
-        $lastInvoice = $this->dataProvider->findOne(
+        $lastInvoice = $this->data->findOne(
             Invoice::class, [], 'ID DESC'
         );
 
         if (empty($lastInvoice)) {
-            $lastInvoice = $this->dataProvider->create(Invoice::class, ['ID' => 0]);
+            $lastInvoice = $this->data->create(Invoice::class, ['ID' => 0]);
         }
 
         return $this->lastInvoice = $lastInvoice;
@@ -161,7 +158,7 @@ class InvoicePresenter extends Presenter
     }
 
     private function saveInvoice(array $invoiceData) {
-        $this->dataProvider->save(
+        $this->data->save(
             Invoice::class,
             [
                 'ID' => $invoiceData['invoiceNr'],
@@ -182,7 +179,7 @@ class InvoicePresenter extends Presenter
             ]
         );
         foreach ($invoiceData['invoicedItems'] as $item) {
-            $this->dataProvider->save(
+            $this->data->save(
                 Item::class,
                 [
                     'INVOICE_ID' => $invoiceData['invoiceNr'],
