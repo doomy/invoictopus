@@ -2,6 +2,8 @@
 
 namespace App\Presenters;
 
+use Doomy\DataGrid\Component\DataGrid;
+use Doomy\DataGrid\DataGridEntryFactory;
 use Doomy\Helper\StringTools;
 use Doomy\Ormtopus\DataEntityManager;
 use Invoictopus\Invoice\Invoice;
@@ -19,10 +21,12 @@ class InvoicePresenter extends Presenter
     private int $itemCount = 1;
 
     private DataEntityManager $data;
+    private DataGridEntryFactory $dataGridEntryFactory;
 
-    public function __construct(DataEntityManager $data)
+    public function __construct(DataEntityManager $data, DataGridEntryFactory $dataGridEntryFactory)
     {
         $this->data = $data;
+        $this->dataGridEntryFactory = $dataGridEntryFactory;
     }
 
     public function renderForm() {
@@ -39,6 +43,11 @@ class InvoicePresenter extends Presenter
 
         $this->sendResponse(new MpdfResponse($html, $this->assembleInvoiceFilename($templateData)));
     }
+
+    public function renderList(): void {
+
+    }
+
 
     public function createComponentInvoiceForm() {
         $invoiceDate = new \DateTimeImmutable();
@@ -230,6 +239,13 @@ class InvoicePresenter extends Presenter
             $invoiceDate->format('Y-m-d'),
             strtolower(StringTools::normalizeStringForUri($templateData['customerName']))
         );
+    }
+
+    public function createComponentInvoiceDataGrid(): DataGrid
+    {
+        $dataGrid = new DataGrid($this->dataGridEntryFactory, $this->data, Invoice::class);
+        $dataGrid->setReadOnly(TRUE);
+        return $dataGrid;
     }
 
 }

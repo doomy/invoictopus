@@ -1,0 +1,13 @@
+{
+    "name": "doomy/translator",
+    "autoload": {
+      "classmap": ["src/"]
+    },
+    "require": {
+		"php": ">= 7.1",
+		"dibi/dibi": "*",
+        "doomy/ormtopus": "^1.0",
+        "nette/utils": "*"
+	},
+	"minimum-stability": "stable"
+}

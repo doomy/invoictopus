@@ -19,3 +19,4 @@ services:
 	entityCache: Doomy\EntityCache\EntityCache
 	data: Doomy\Ormtopus\DataEntityManager
 	migrator: Doomy\Migrator\Migrator(@connection, @data, %migrator%)
+	datagridEntryFactory: Doomy\DataGrid\DataGridEntryFactory

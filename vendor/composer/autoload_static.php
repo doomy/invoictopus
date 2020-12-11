@@ -26,6 +26,7 @@ class ComposerStaticInit091ed5d24b4127ffc48411e34be2086f
         ),
         'D' => 
         array (
+            'Doomy\\DataGrid\\' => 15,
             'DeepCopy\\' => 9,
         ),
     );
@@ -42,6 +43,10 @@ class ComposerStaticInit091ed5d24b4127ffc48411e34be2086f
         'Mpdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
+        ),
+        'Doomy\\DataGrid\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doomy/datagrid/src',
         ),
         'DeepCopy\\' => 
         array (
@@ -118,6 +123,10 @@ class ComposerStaticInit091ed5d24b4127ffc48411e34be2086f
         'Dibi\\Translator' => __DIR__ . '/..' . '/dibi/dibi/src/Dibi/Translator.php',
         'Dibi\\Type' => __DIR__ . '/..' . '/dibi/dibi/src/Dibi/Type.php',
         'Dibi\\UniqueConstraintViolationException' => __DIR__ . '/..' . '/dibi/dibi/src/Dibi/exceptions.php',
+        'Doomy\\Components\\Component\\BaseComponent' => __DIR__ . '/..' . '/doomy/components/src/Component/BaseComponent.php',
+        'Doomy\\Components\\Component\\DynamicPopupForm' => __DIR__ . '/..' . '/doomy/components/src/Component/DynamicPopupForm.php',
+        'Doomy\\Components\\Component\\PopupComponent' => __DIR__ . '/..' . '/doomy/components/src/Component/PopupComponent.php',
+        'Doomy\\Components\\FlashMessage' => __DIR__ . '/..' . '/doomy/components/src/FlashMessage.php',
         'Doomy\\CustomDibi\\Connection' => __DIR__ . '/..' . '/doomy/customdibi/src/Connection.php',
         'Doomy\\DataProvider\\DataProvider' => __DIR__ . '/..' . '/doomy/dataprovider/src/DataProvider.php',
         'Doomy\\EntityCache\\EntityCache' => __DIR__ . '/..' . '/doomy/entitycache/src/EntityCache.php',
@@ -134,6 +143,9 @@ class ComposerStaticInit091ed5d24b4127ffc48411e34be2086f
         'Doomy\\Repository\\Model\\TableDefinition' => __DIR__ . '/..' . '/doomy/repository/src/Model/TableDefinition.php',
         'Doomy\\Repository\\RepoFactory' => __DIR__ . '/..' . '/doomy/repository/src/RepoFactory.php',
         'Doomy\\Repository\\Repository' => __DIR__ . '/..' . '/doomy/repository/src/Repository.php',
+        'Doomy\\Translator\\Model\\SystemTranslation' => __DIR__ . '/..' . '/doomy/translator/src/Model/SystemTranslation.php',
+        'Doomy\\Translator\\Service\\DummyTranslator' => __DIR__ . '/..' . '/doomy/translator/src/Service/DummyTranslator.php',
+        'Doomy\\Translator\\Service\\Translator' => __DIR__ . '/..' . '/doomy/translator/src/Service/Translator.php',
         'Latte\\CompileException' => __DIR__ . '/..' . '/latte/latte/src/Latte/exceptions.php',
         'Latte\\Compiler' => __DIR__ . '/..' . '/latte/latte/src/Latte/Compiler/Compiler.php',
         'Latte\\Engine' => __DIR__ . '/..' . '/latte/latte/src/Latte/Engine.php',

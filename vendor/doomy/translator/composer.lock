@@ -1,0 +1,311 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "4248d3178d529c30cc72a0bdd0540eb9",
+    "packages": [
+        {
+            "name": "dibi/dibi",
+            "version": "v4.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dg/dibi.git",
+                "reference": "ed2a82741993706c15dbd4f5b8dd7eb5b75f7aa2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dg/dibi/zipball/ed2a82741993706c15dbd4f5b8dd7eb5b75f7aa2",
+                "reference": "ed2a82741993706c15dbd4f5b8dd7eb5b75f7aa2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "replace": {
+                "dg/dibi": "*"
+            },
+            "require-dev": {
+                "nette/tester": "~2.0",
+                "phpstan/phpstan": "^0.12",
+                "tracy/tracy": "~2.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.1-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0-only",
+                "GPL-3.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "https://davidgrudl.com"
+                }
+            ],
+            "description": "Dibi is Database Abstraction Library for PHP",
+            "homepage": "https://dibiphp.com",
+            "keywords": [
+                "access",
+                "database",
+                "dbal",
+                "mssql",
+                "mysql",
+                "odbc",
+                "oracle",
+                "pdo",
+                "postgresql",
+                "sqlite",
+                "sqlsrv"
+            ],
+            "time": "2020-03-26T03:10:39+00:00"
+        },
+        {
+            "name": "doomy/customdibi",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doomy/CustomDibi.git",
+                "reference": "975e5e72eaf9ef40e7b3b2ba312f2d114a2dd088"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doomy/CustomDibi/zipball/975e5e72eaf9ef40e7b3b2ba312f2d114a2dd088",
+                "reference": "975e5e72eaf9ef40e7b3b2ba312f2d114a2dd088",
+                "shasum": ""
+            },
+            "require": {
+                "dibi/dibi": "*",
+                "php": ">= 5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "time": "2019-04-09T16:50:27+00:00"
+        },
+        {
+            "name": "doomy/entitycache",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doomy/EntityCache.git",
+                "reference": "05f9b31986db17c697d30d6a21833ccf5deb55b0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doomy/EntityCache/zipball/05f9b31986db17c697d30d6a21833ccf5deb55b0",
+                "reference": "05f9b31986db17c697d30d6a21833ccf5deb55b0",
+                "shasum": ""
+            },
+            "require": {
+                "dibi/dibi": "*",
+                "php": ">= 5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "time": "2018-02-17T09:02:43+00:00"
+        },
+        {
+            "name": "doomy/ormtopus",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doomy/ormtopus.git",
+                "reference": "b908950e384662af2da7693200b2f9c144ab4088"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doomy/ormtopus/zipball/b908950e384662af2da7693200b2f9c144ab4088",
+                "reference": "b908950e384662af2da7693200b2f9c144ab4088",
+                "shasum": ""
+            },
+            "require": {
+                "dibi/dibi": "*",
+                "doomy/entitycache": ">= 1.0.0",
+                "doomy/repository": ">= 3.0.4",
+                "php": ">= 5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "time": "2020-06-20T12:07:03+00:00"
+        },
+        {
+            "name": "doomy/repository",
+            "version": "3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doomy/repository.git",
+                "reference": "4f239c7109ca035163ebd542cb15eaec50afeabf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doomy/repository/zipball/4f239c7109ca035163ebd542cb15eaec50afeabf",
+                "reference": "4f239c7109ca035163ebd542cb15eaec50afeabf",
+                "shasum": ""
+            },
+            "require": {
+                "dibi/dibi": ">=3.0",
+                "doomy/customdibi": "^1.0.2",
+                "doomy/stringtools": "^1.0.1",
+                "php": ">= 7.4"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "simple data model framework for dataprovider service",
+            "time": "2020-06-27T14:48:10+00:00"
+        },
+        {
+            "name": "doomy/stringtools",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doomy/stringtools.git",
+                "reference": "6b9cd82e94580a0e0cc3b66429ed77d37e93099b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doomy/stringtools/zipball/6b9cd82e94580a0e0cc3b66429ed77d37e93099b",
+                "reference": "6b9cd82e94580a0e0cc3b66429ed77d37e93099b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">= 7"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Simple helper library for various string operations",
+            "time": "2019-11-19T17:59:30+00:00"
+        },
+        {
+            "name": "nette/utils",
+            "version": "v3.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nette/utils.git",
+                "reference": "c09937fbb24987b2a41c6022ebe84f4f1b8eec0f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nette/utils/zipball/c09937fbb24987b2a41c6022ebe84f4f1b8eec0f",
+                "reference": "c09937fbb24987b2a41c6022ebe84f4f1b8eec0f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "nette/tester": "~2.0",
+                "phpstan/phpstan": "^0.12",
+                "tracy/tracy": "^2.3"
+            },
+            "suggest": {
+                "ext-gd": "to use Image",
+                "ext-iconv": "to use Strings::webalize(), toAscii(), chr() and reverse()",
+                "ext-intl": "to use Strings::webalize(), toAscii(), normalize() and compare()",
+                "ext-json": "to use Nette\\Utils\\Json",
+                "ext-mbstring": "to use Strings::lower() etc...",
+                "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()",
+                "ext-xml": "to use Strings::length() etc. when mbstring is not available"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0-only",
+                "GPL-3.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "https://davidgrudl.com"
+                },
+                {
+                    "name": "Nette Community",
+                    "homepage": "https://nette.org/contributors"
+                }
+            ],
+            "description": "🛠 Nette Utils: lightweight utilities for string & array manipulation, image handling, safe JSON encoding/decoding, validation, slug or strong password generating etc.",
+            "homepage": "https://nette.org",
+            "keywords": [
+                "array",
+                "core",
+                "datetime",
+                "images",
+                "json",
+                "nette",
+                "paginator",
+                "password",
+                "slugify",
+                "string",
+                "unicode",
+                "utf-8",
+                "utility",
+                "validation"
+            ],
+            "time": "2020-08-07T10:34:21+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">= 7.1"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
+}

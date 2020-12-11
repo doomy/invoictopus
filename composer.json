@@ -24,7 +24,8 @@
 		"doomy/migrator": "^2.0.0",
 		"doomy/extended-nette-form": "^2.2.1",
 		"doomy/repository": "^3.2.2",
-		"doomy/ormtopus": "^1.0"
+		"doomy/ormtopus": "^1.0",
+		"doomy/datagrid":"^1.1.0"
 	},
 	"autoload": {
 		"classmap": ["app/Bootstrap.php"]

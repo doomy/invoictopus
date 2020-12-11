@@ -9,5 +9,6 @@ return array(
     'setasign\\Fpdi\\' => array($vendorDir . '/setasign/fpdi/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Mpdf\\' => array($vendorDir . '/mpdf/mpdf/src'),
+    'Doomy\\DataGrid\\' => array($vendorDir . '/doomy/datagrid/src'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
 );
