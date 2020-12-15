@@ -8,7 +8,8 @@ class StringTools
     {
         $urlEncoded = urlencode(static::removeCzDiacritics($string));
         $string = str_replace('+', '-', $urlEncoded);
-        return str_replace('.', '', $string);
+        $string = str_replace('.', '', $string);
+        return str_replace(',', '', $string);
     }
 
     public static function underscoresToCamelCase($string, $capitalizeFirstCharacter = false)

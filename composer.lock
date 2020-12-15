@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb9c9fa2d1f4ec1e2ec4ea7f79f54727",
+    "content-hash": "ef9dafd7c23be76dacc6d10b7117d36d",
     "packages": [
         {
             "name": "dibi/dibi",
@@ -340,16 +340,16 @@
         },
         {
             "name": "doomy/stringtools",
-            "version": "2.0.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doomy/stringtools.git",
-                "reference": "778d1ad96a7cb3de74b05a177eb4fea2cff6f51c"
+                "reference": "524e04aa0d09817840f6662c872d38f9b934a4a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doomy/stringtools/zipball/778d1ad96a7cb3de74b05a177eb4fea2cff6f51c",
-                "reference": "778d1ad96a7cb3de74b05a177eb4fea2cff6f51c",
+                "url": "https://api.github.com/repos/doomy/stringtools/zipball/524e04aa0d09817840f6662c872d38f9b934a4a5",
+                "reference": "524e04aa0d09817840f6662c872d38f9b934a4a5",
                 "shasum": ""
             },
             "require": {
@@ -362,12 +362,15 @@
                     "src/"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "Simple helper library for various string operations",
-            "time": "2020-11-16T09:38:52+00:00"
+            "support": {
+                "source": "https://github.com/doomy/stringtools/tree/2.1.0",
+                "issues": "https://github.com/doomy/stringtools/issues"
+            },
+            "time": "2020-12-15T20:26:46+00:00"
         },
         {
             "name": "doomy/translator",

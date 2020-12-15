@@ -353,24 +353,24 @@
     },
     {
         "name": "doomy/stringtools",
-        "version": "2.0.0",
-        "version_normalized": "2.0.0.0",
+        "version": "2.1.0",
+        "version_normalized": "2.1.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/doomy/stringtools.git",
-            "reference": "778d1ad96a7cb3de74b05a177eb4fea2cff6f51c"
+            "reference": "524e04aa0d09817840f6662c872d38f9b934a4a5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/doomy/stringtools/zipball/778d1ad96a7cb3de74b05a177eb4fea2cff6f51c",
-            "reference": "778d1ad96a7cb3de74b05a177eb4fea2cff6f51c",
+            "url": "https://api.github.com/repos/doomy/stringtools/zipball/524e04aa0d09817840f6662c872d38f9b934a4a5",
+            "reference": "524e04aa0d09817840f6662c872d38f9b934a4a5",
             "shasum": ""
         },
         "require": {
             "ext-json": "*",
             "php": ">= 7.1"
         },
-        "time": "2020-11-16T09:38:52+00:00",
+        "time": "2020-12-15T20:26:46+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -378,11 +378,14 @@
                 "src/"
             ]
         },
-        "notification-url": "https://packagist.org/downloads/",
         "license": [
             "MIT"
         ],
-        "description": "Simple helper library for various string operations"
+        "description": "Simple helper library for various string operations",
+        "support": {
+            "source": "https://github.com/doomy/stringtools/tree/2.1.0",
+            "issues": "https://github.com/doomy/stringtools/issues"
+        }
     },
     {
         "name": "doomy/translator",

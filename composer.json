@@ -4,6 +4,12 @@
 	"keywords": ["nette"],
 	"type": "project",
 	"license": ["MIT", "BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "git@github.com:doomy/stringtools.git"
+		}
+	],
 	"require": {
 		"php": ">= 7.4",
 		"nette/application": "^3.0",
@@ -25,7 +31,8 @@
 		"doomy/extended-nette-form": "^2.2.1",
 		"doomy/repository": "^3.2.2",
 		"doomy/ormtopus": "^1.0",
-		"doomy/datagrid":"^1.1.0"
+		"doomy/datagrid":"^1.1.0",
+		"doomy/stringtools": "^2.1.0"
 	},
 	"autoload": {
 		"classmap": ["app/Bootstrap.php"]
