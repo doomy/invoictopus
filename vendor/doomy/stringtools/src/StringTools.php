@@ -6,10 +6,10 @@ class StringTools
 {
     public static function normalizeStringForUri(string $string): string
     {
+        $string = str_replace(',', '', $string);
         $urlEncoded = urlencode(static::removeCzDiacritics($string));
         $string = str_replace('+', '-', $urlEncoded);
-        $string = str_replace('.', '', $string);
-        return str_replace(',', '', $string);
+        return str_replace('.', '', $string);
     }
 
     public static function underscoresToCamelCase($string, $capitalizeFirstCharacter = false)

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef9dafd7c23be76dacc6d10b7117d36d",
+    "content-hash": "42fee3e26bba38578284b3153341323d",
     "packages": [
         {
             "name": "dibi/dibi",
@@ -340,16 +340,16 @@
         },
         {
             "name": "doomy/stringtools",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doomy/stringtools.git",
-                "reference": "524e04aa0d09817840f6662c872d38f9b934a4a5"
+                "reference": "da191aed771fe9480ff622710aab781a595a5461"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doomy/stringtools/zipball/524e04aa0d09817840f6662c872d38f9b934a4a5",
-                "reference": "524e04aa0d09817840f6662c872d38f9b934a4a5",
+                "url": "https://api.github.com/repos/doomy/stringtools/zipball/da191aed771fe9480ff622710aab781a595a5461",
+                "reference": "da191aed771fe9480ff622710aab781a595a5461",
                 "shasum": ""
             },
             "require": {
@@ -367,10 +367,10 @@
             ],
             "description": "Simple helper library for various string operations",
             "support": {
-                "source": "https://github.com/doomy/stringtools/tree/2.1.0",
+                "source": "https://github.com/doomy/stringtools/tree/2.1.1",
                 "issues": "https://github.com/doomy/stringtools/issues"
             },
-            "time": "2020-12-15T20:26:46+00:00"
+            "time": "2020-12-15T20:58:48+00:00"
         },
         {
             "name": "doomy/translator",
