@@ -26,7 +26,7 @@ final class Structure implements Schema
 	/** @var Schema|null  for array|list */
 	private $otherItems;
 
-	/** @var array */
+	/** @var array{?int, ?int} */
 	private $range = [null, null];
 
 
@@ -38,6 +38,7 @@ final class Structure implements Schema
 		(function (Schema ...$items) {})(...array_values($items));
 		$this->items = $items;
 		$this->castTo = 'object';
+		$this->required = true;
 	}
 
 
@@ -47,14 +48,14 @@ final class Structure implements Schema
 	}
 
 
-	public function min(?float $min): self
+	public function min(?int $min): self
 	{
 		$this->range[0] = $min;
 		return $this;
 	}
 
 
-	public function max(?float $max): self
+	public function max(?int $max): self
 	{
 		$this->range[1] = $max;
 		return $this;
@@ -76,10 +77,15 @@ final class Structure implements Schema
 
 	public function normalize($value, Context $context)
 	{
+		if ($prevent = (is_array($value) && isset($value[Helpers::PREVENT_MERGING]))) {
+			unset($value[Helpers::PREVENT_MERGING]);
+		}
+
 		$value = $this->doNormalize($value, $context);
 		if (is_object($value)) {
 			$value = (array) $value;
 		}
+
 		if (is_array($value)) {
 			foreach ($value as $key => $val) {
 				$itemSchema = $this->items[$key] ?? $this->otherItems;
@@ -88,6 +94,9 @@ final class Structure implements Schema
 					$value[$key] = $itemSchema->normalize($val, $context);
 					array_pop($context->path);
 				}
+			}
+			if ($prevent) {
+				$value[Helpers::PREVENT_MERGING] = true;
 			}
 		}
 		return $value;
@@ -123,14 +132,17 @@ final class Structure implements Schema
 	}
 
 
-	public function complete($value, Nette\Schema\Context $context)
+	public function complete($value, Context $context)
 	{
 		if ($value === null) {
 			$value = []; // is unable to distinguish null from array in NEON
 		}
 
-		$expected = 'array' . ($this->range === [null, null] ? '' : ':' . implode('..', $this->range));
-		if (!$this->doValidate($value, $expected, $context)) {
+		$this->doDeprecation($context);
+
+		if (!$this->doValidate($value, 'array', $context)
+			|| !$this->doValidateRange($value, $this->range, $context)
+		) {
 			return;
 		}
 
@@ -140,11 +152,15 @@ final class Structure implements Schema
 			if ($this->otherItems) {
 				$items += array_fill_keys($extraKeys, $this->otherItems);
 			} else {
-				$hint = Nette\Utils\Helpers::getSuggestion(array_map('strval', array_keys($items)), (string) $extraKeys[0]);
-				$s = implode("', '", array_map(function ($key) use ($context) {
-					return implode(' › ', array_merge($context->path, [$key]));
-				}, $hint ? [$extraKeys[0]] : $extraKeys));
-				$context->addError("Unexpected option '$s'" . ($hint ? ", did you mean '$hint'?" : '.'));
+				$keys = array_map('strval', array_keys($items));
+				foreach ($extraKeys as $key) {
+					$hint = Nette\Utils\Helpers::getSuggestion($keys, (string) $key);
+					$context->addError(
+						'Unexpected item %path%' . ($hint ? ", did you mean '%hint%'?" : '.'),
+						Nette\Schema\Message::UNEXPECTED_ITEM,
+						['hint' => $hint]
+					)->path[] = $key;
+				}
 			}
 		}
 
@@ -171,6 +187,8 @@ final class Structure implements Schema
 
 	public function completeDefault(Context $context)
 	{
-		return $this->complete([], $context);
+		return $this->required
+			? $this->complete([], $context)
+			: null;
 	}
 }

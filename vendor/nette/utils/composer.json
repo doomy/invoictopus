@@ -15,12 +15,15 @@
 		}
 	],
 	"require": {
-		"php": ">=7.1"
+		"php": ">=7.2 <8.1"
 	},
 	"require-dev": {
 		"nette/tester": "~2.0",
 		"tracy/tracy": "^2.3",
 		"phpstan/phpstan": "^0.12"
+	},
+	"conflict": {
+		"nette/di": "<3.0.6"
 	},
 	"suggest": {
 		"ext-iconv": "to use Strings::webalize(), toAscii(), chr() and reverse()",
@@ -41,7 +44,7 @@
 	},
 	"extra": {
 		"branch-alias": {
-			"dev-master": "3.1-dev"
+			"dev-master": "3.2-dev"
 		}
 	}
 }
