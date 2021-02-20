@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f782865fee69fc34ba71495cf4499f8",
+    "content-hash": "6e952bc2ead3ace13e5208430d9a2d12",
     "packages": [
         {
             "name": "dibi/dibi",
@@ -128,23 +128,23 @@
         },
         {
             "name": "doomy/datagrid",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doomy/datagrid.git",
-                "reference": "28354bb75c39de90262ce0f6179197c5297bf646"
+                "reference": "af75f2c046ac8a1b4d3251e257daf725c4a81008"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doomy/datagrid/zipball/28354bb75c39de90262ce0f6179197c5297bf646",
-                "reference": "28354bb75c39de90262ce0f6179197c5297bf646",
+                "url": "https://api.github.com/repos/doomy/datagrid/zipball/af75f2c046ac8a1b4d3251e257daf725c4a81008",
+                "reference": "af75f2c046ac8a1b4d3251e257daf725c4a81008",
                 "shasum": ""
             },
             "require": {
                 "doomy/components": "2.0.1",
                 "doomy/translator": "^1.2.0",
                 "nette/utils": "^v3.1.3",
-                "php": "^7.4"
+                "php": ">=7.4"
             },
             "require-dev": {
                 "mockery/mockery": "^1.3",
@@ -158,7 +158,11 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "DataGrid components",
-            "time": "2020-11-14T09:15:08+00:00"
+            "support": {
+                "issues": "https://github.com/doomy/datagrid/issues",
+                "source": "https://github.com/doomy/datagrid/tree/1.2.0"
+            },
+            "time": "2021-01-11T20:51:21+00:00"
         },
         {
             "name": "doomy/entitycache",
