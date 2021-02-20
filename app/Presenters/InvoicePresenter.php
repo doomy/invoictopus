@@ -245,6 +245,7 @@ class InvoicePresenter extends Presenter
     {
         $dataGrid = new DataGrid($this->dataGridEntryFactory, $this->data, Invoice::class, [], FALSE, FALSE);
         $dataGrid->setReadOnly(TRUE);
+        $dataGrid->setCustomOrderBy('ID DESC');
         return $dataGrid;
     }
 
