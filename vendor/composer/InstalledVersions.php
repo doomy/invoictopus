@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'd0b0e17cf5bc1f951102c2dee63b9c0780a86e23',
+    'reference' => '334f96b9dcccf104a74e4fa32e9a6c44890dc108',
     'name' => 'doomy/invoictopus',
   ),
   'versions' => 
@@ -71,12 +71,12 @@ private static $installed = array (
     ),
     'doomy/datagrid' => 
     array (
-      'pretty_version' => '1.2.0',
-      'version' => '1.2.0.0',
+      'pretty_version' => '1.3.0',
+      'version' => '1.3.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'af75f2c046ac8a1b4d3251e257daf725c4a81008',
+      'reference' => 'd91040de55ddf2e5628489d2e4afa47328899f94',
     ),
     'doomy/entitycache' => 
     array (
@@ -103,7 +103,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'd0b0e17cf5bc1f951102c2dee63b9c0780a86e23',
+      'reference' => '334f96b9dcccf104a74e4fa32e9a6c44890dc108',
     ),
     'doomy/migrator' => 
     array (

@@ -243,7 +243,7 @@ class InvoicePresenter extends Presenter
 
     public function createComponentInvoiceDataGrid(): DataGrid
     {
-        $dataGrid = new DataGrid($this->dataGridEntryFactory, $this->data, Invoice::class);
+        $dataGrid = new DataGrid($this->dataGridEntryFactory, $this->data, Invoice::class, [], FALSE, FALSE);
         $dataGrid->setReadOnly(TRUE);
         return $dataGrid;
     }

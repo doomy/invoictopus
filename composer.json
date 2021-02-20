@@ -8,6 +8,10 @@
 		{
 			"type": "vcs",
 			"url": "git@github.com:doomy/stringtools.git"
+		},
+		{
+			"type": "vcs",
+			"url": "git@github.com:doomy/datagrid.git"
 		}
 	],
 	"require": {
@@ -31,7 +35,7 @@
 		"doomy/extended-nette-form": "^2.2.1",
 		"doomy/repository": "^3.2.2",
 		"doomy/ormtopus": "^1.0",
-		"doomy/datagrid":"^1.2.0",
+		"doomy/datagrid":"^1.3.0",
 		"doomy/stringtools": "^2.1.1"
 	},
 	"autoload": {

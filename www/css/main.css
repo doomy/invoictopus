@@ -111,3 +111,8 @@ table.total td.total {
     text-align: right;
     margin-top: 7rem;
 }
+
+
+table.dataTable td {
+    min-width: 3rem;
+}
