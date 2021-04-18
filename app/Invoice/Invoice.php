@@ -7,6 +7,8 @@ use Doomy\Repository\Model\Entity;
 class Invoice extends Entity
 {
     const TABLE = 't_invoice';
+    const IDENTITY_COLUMN = 'ID';
+
     public $ID;
     public $SUPPLIER_NAME;
     public $SUPPLIER_ADDRESS_1;

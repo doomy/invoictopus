@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '334f96b9dcccf104a74e4fa32e9a6c44890dc108',
+    'reference' => '4db82465c724a7199c71083c48a92d024a47dc62',
     'name' => 'doomy/invoictopus',
   ),
   'versions' => 
@@ -47,12 +47,12 @@
     ),
     'doomy/datagrid' => 
     array (
-      'pretty_version' => '1.3.0',
-      'version' => '1.3.0.0',
+      'pretty_version' => '1.5.0',
+      'version' => '1.5.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'd91040de55ddf2e5628489d2e4afa47328899f94',
+      'reference' => '8c7816881c34defad6fe79a99632e7a54ea98efc',
     ),
     'doomy/entitycache' => 
     array (
@@ -79,7 +79,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '334f96b9dcccf104a74e4fa32e9a6c44890dc108',
+      'reference' => '4db82465c724a7199c71083c48a92d024a47dc62',
     ),
     'doomy/migrator' => 
     array (

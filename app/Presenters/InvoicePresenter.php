@@ -244,8 +244,13 @@ class InvoicePresenter extends Presenter
     public function createComponentInvoiceDataGrid(): DataGrid
     {
         $dataGrid = new DataGrid($this->dataGridEntryFactory, $this->data, Invoice::class, [], FALSE, FALSE);
-        $dataGrid->setReadOnly(TRUE);
+        $dataGrid->setReadOnly(FALSE);
+        $dataGrid->setPreventAdd(TRUE);
         $dataGrid->setCustomOrderBy('ID DESC');
+        $dataGrid->onEvent(DataGrid::EVENT_ITEM_DELETED, function(int $invoiceId) {
+            $this->data->delete(Item::class, ['INVOICE_ID' => $invoiceId]);
+            $this->data->deleteById(Invoice::class, $invoiceId);
+        });
         return $dataGrid;
     }
 
