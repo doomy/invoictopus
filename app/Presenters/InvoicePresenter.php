@@ -17,6 +17,8 @@ use Nette\ComponentModel\IComponent;
 
 class InvoicePresenter extends Presenter
 {
+    private const VAT_RATE = 21;
+
     private $lastInvoice;
     private int $itemCount = 1;
 
@@ -133,9 +135,10 @@ class InvoicePresenter extends Presenter
             'taxableDate' => $this->getHttpRequest()->getPost('TAXABLE_DATE'),
             'dueDate' => $this->getHttpRequest()->getPost('DUE_DATE'),
             'invoicedItems' => $invoiceItems,
+            'vatRate' => static::VAT_RATE,
             'total' => [
                 'amount' => $this->calculateItemsTotalPrice($invoiceItems),
-                'currency' => 'CZK',
+                'currency' => 'Kč',
             ],
         ];
     }
@@ -210,9 +213,10 @@ class InvoicePresenter extends Presenter
                 'item' => $item['NAME'],
                 'amount' => $item['AMOUNT'],
                 'price' => $item['PRICE'],
-                'vatRate' => $item['VAT_RATE'],
-                'total' => $this->calculateTotalPrice($item['AMOUNT'], $item['PRICE'], $item['VAT_RATE']),
-                'currency' => 'CZK'
+                'vatRate' => static::VAT_RATE,
+                'total' => $this->calculateTotalPrice($item['AMOUNT'], $item['PRICE'], static::VAT_RATE),
+                'vatPrice' => ($item['PRICE'] / 100) * static::VAT_RATE,
+                'currency' => 'Kč'
             ];
         }
         return $items;

@@ -105,7 +105,7 @@
 
     <table class="table-items">
         <thead>
-        <tr class="items-head-row">
+        <tr class="items-he ad-row">
             <th>
             </th>
             <th>
@@ -118,7 +118,7 @@
                 Základ DPH
             </th>
             <th>
-                DPH %
+                DPH {$vatRate} %
             </th>
             <th>
                 Cena celkem
@@ -135,13 +135,13 @@
                     {$invoicedItem[amount]|number}
                 </td>
                 <td>
-                    {$invoicedItem[price]|price}
+                    {$invoicedItem[price]|price} {$invoicedItem[currency]}
                 </td>
                 <td>
-                    {$invoicedItem[price]|price}
+                    {$invoicedItem[price] * $invoicedItem[amount]|price} {$invoicedItem[currency]}
                 </td>
                 <td>
-                    {$invoicedItem[vatRate]}
+                    {$invoicedItem[vatPrice] * $invoicedItem[amount]|price} {$invoicedItem[currency]}
                 </td>
                 <td>
                     {$invoicedItem[total]|price} {$invoicedItem[currency]}
