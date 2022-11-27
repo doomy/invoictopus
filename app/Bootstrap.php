@@ -14,6 +14,7 @@ class Bootstrap
 	{
 		$configurator = new Configurator;
 
+        $configurator->setDebugMode(true);
 		//$configurator->setDebugMode('23.75.345.200'); // enable for your remote IP
 		$configurator->enableTracy(__DIR__ . '/../log');
 

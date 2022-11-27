@@ -2,6 +2,8 @@
 
 namespace App\Presenters;
 
+use Invoictopus\Currency\Currency;
+use Defr\QRPlatba\QRPlatba;
 use Doomy\DataGrid\Component\DataGrid;
 use Doomy\DataGrid\DataGridEntryFactory;
 use Doomy\Helper\StringTools;
@@ -93,6 +95,7 @@ class InvoicePresenter extends Presenter
             $itemContainer->addInteger('VAT_RATE', 'VAT rate(%)')->setDefaultValue($item->VAT_RATE);
         }
         $form->addSubmit('Generate', 'Generate');
+        $form->onSuccess[] = function () {};
 
         return $form;
     }
@@ -117,9 +120,24 @@ class InvoicePresenter extends Presenter
     {
         $invoiceItems = $this->getInvoiceItems();
 
+        $totalAmount = $this->calculateItemsTotalPrice($invoiceItems);
+
+        $invoiceNr = $this->getHttpRequest()->getPost('ID');
+        $bankAccountNr = $this->getHttpRequest()->getPost('BANK_ACCOUNT_NR');
+        $dueDate = $this->getHttpRequest()->getPost('DUE_DATE');
+
+        $qrPlatba = new QRPlatba();
+        $qrPlatba
+            ->setAccount($bankAccountNr)
+            ->setVariableSymbol($invoiceNr)
+            ->setMessage(sprintf("Faktura %d", $invoiceNr))
+            ->setAmount($totalAmount)
+            ->setCurrency(Currency::CZK->name)
+            ->setDueDate(\DateTime::createFromFormat("d.m.Y", $dueDate));
+
         return [
             'basePath' => $this->getHttpRequest()->getUrl()->getBasePath(),
-            'invoiceNr' => $this->getHttpRequest()->getPost('ID'),
+            'invoiceNr' => $invoiceNr,
             'supplierName' => $this->getHttpRequest()->getPost('SUPPLIER_NAME'),
             'supplierAddress1' => $this->getHttpRequest()->getPost('SUPPLIER_ADDRESS_1'),
             'supplierAddress2' => $this->getHttpRequest()->getPost('SUPPLIER_ADDRESS_2'),
@@ -130,16 +148,17 @@ class InvoicePresenter extends Presenter
             'customerAddress2' => $this->getHttpRequest()->getPost('CUSTOMER_ADDRESS_2'),
             'customerCompanyNr' => $this->getHttpRequest()->getPost('CUSTOMER_COMPANY_NR'),
             'customerVatNr' => $this->getHttpRequest()->getPost('CUSTOMER_VAT_NR'),
-            'bankAccountNr' => $this->getHttpRequest()->getPost('BANK_ACCOUNT_NR'),
+            'bankAccountNr' => $bankAccountNr,
             'invoiceDate' => $this->getHttpRequest()->getPost('INVOICE_DATE'),
             'taxableDate' => $this->getHttpRequest()->getPost('TAXABLE_DATE'),
-            'dueDate' => $this->getHttpRequest()->getPost('DUE_DATE'),
+            'dueDate' => $dueDate,
             'invoicedItems' => $invoiceItems,
             'vatRate' => static::VAT_RATE,
             'total' => [
-                'amount' => $this->calculateItemsTotalPrice($invoiceItems),
-                'currency' => 'Kč',
+                'amount' => $totalAmount,
+                'currency' => Currency::CZK->value,
             ],
+            'qrCode' => $qrPlatba->getQRCodeImage(true, 150)
         ];
     }
 

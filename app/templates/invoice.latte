@@ -154,9 +154,10 @@
     <table class="symetric total">
         <tbody>
         <tr>
-            <td>
+            <td style="text-align: center">
+                {$qrCode|noescape}
             </td>
-            <td class="total">
+            <td class="total" style="padding-top: 60px;">
                 {$total[amount]|price} {$total[currency]}
             </td>
         </tr>
