@@ -11,14 +11,14 @@
 		}
 	],
 	"require": {
-		"php": ">= 7.4",
+		"php": ">=8.1",
 		"nette/application": "^3.0",
 		"nette/bootstrap": "^3.0",
 		"nette/caching": "^3.0",
 		"nette/database": "^3.0",
 		"nette/di": "^3.0.7",
 		"nette/finder": "^2.5",
-		"nette/forms": "^3.0",
+		"nette/forms": "3.0.*",
 		"nette/http": "^3.0",
 		"nette/mail": "^3.0",
 		"nette/robot-loader": "^3.0",
@@ -28,19 +28,21 @@
 		"tracy/tracy": "^2.6",
 		"mpdf/mpdf": "^8.0.0",
 		"doomy/migrator": "^2.0.0",
-		"doomy/extended-nette-form": "^2.2.1",
 		"doomy/repository": "^3.2.2",
 		"doomy/ormtopus": "^1.0",
 		"doomy/datagrid":"1.5.0",
-		"doomy/stringtools": "^2.1.1"
+		"doomy/stringtools": "^2.1.1",
+		"dfridrich/qr-platba": "^2.0",
+		"doomy/extended-nette-form": "^v2.3.2"
 	},
 	"autoload": {
+		"psr-4": { "Invoictopus\\": "app/", "App\\":  "app/"},
 		"classmap": ["app/Bootstrap.php"]
 	},
 	"minimum-stability": "stable",
 	"config": {
 		"platform": {
-			"php": "7.4"
+			"php": "8.1"
 		}
 	}
 }

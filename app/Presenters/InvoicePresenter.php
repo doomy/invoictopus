@@ -19,10 +19,10 @@ use Nette\ComponentModel\IComponent;
 
 class InvoicePresenter extends Presenter
 {
-    private const VAT_RATE = 21;
+    private const VAT_RATE = 0;
 
     private $lastInvoice;
-    private int $itemCount = 1;
+    private int $itemCount = 2;
 
     private DataEntityManager $data;
     private DataGridEntryFactory $dataGridEntryFactory;
@@ -113,6 +113,7 @@ class InvoicePresenter extends Presenter
         $form->addSelect('invoice_id', 'Select reference invoice', $items);
         $form->addSubmit("go", "Go!");
         $form->setAction($this->link('Invoice:form'));
+        $form->onSuccess[] = function () {};
         return $form;
     }
 
@@ -132,8 +133,13 @@ class InvoicePresenter extends Presenter
             ->setVariableSymbol($invoiceNr)
             ->setMessage(sprintf("Faktura %d", $invoiceNr))
             ->setAmount($totalAmount)
-            ->setCurrency(Currency::CZK->name)
-            ->setDueDate(\DateTime::createFromFormat("d.m.Y", $dueDate));
+            ->setCurrency(Currency::CZK->name);
+            //->setDueDate(\DateTime::createFromFormat("d.m.Y", $dueDate));
+
+        $supplierVatNr = trim($this->getHttpRequest()->getPost('SUPPLIER_VAT_NR'));
+        if ($supplierVatNr === '') {
+            $supplierVatNr = null;
+        }
 
         return [
             'basePath' => $this->getHttpRequest()->getUrl()->getBasePath(),
@@ -142,7 +148,7 @@ class InvoicePresenter extends Presenter
             'supplierAddress1' => $this->getHttpRequest()->getPost('SUPPLIER_ADDRESS_1'),
             'supplierAddress2' => $this->getHttpRequest()->getPost('SUPPLIER_ADDRESS_2'),
             'supplierCompanyNr' => $this->getHttpRequest()->getPost('SUPPLIER_COMPANY_NR'),
-            'supplierVatNr' => $this->getHttpRequest()->getPost('SUPPLIER_VAT_NR'),
+            'supplierVatNr' => $supplierVatNr,
             'customerName' => $this->getHttpRequest()->getPost('CUSTOMER_NAME'),
             'customerAddress1' => $this->getHttpRequest()->getPost('CUSTOMER_ADDRESS_1'),
             'customerAddress2' => $this->getHttpRequest()->getPost('CUSTOMER_ADDRESS_2'),

@@ -46,7 +46,7 @@
                     </tr>
                     <tr>
                         <th>DIČ</th>
-                        <td>{$supplierVatNr}</td>
+                        <td>{$supplierVatNr ?? 'Neplátce DPH'}</td>
                     </tr>
                 </table>
             </td>
@@ -56,10 +56,12 @@
                         <th>IČ</th>
                         <td>{$customerCompanyNr}</td>
                     </tr>
+
                     <tr>
                         <th>DIČ</th>
                         <td>{$customerVatNr}</td>
                     </tr>
+                    
                 </table>
             </td>
         </tr>
