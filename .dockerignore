@@ -1,0 +1,11 @@
+.git
+.idea
+.gitignore
+temp/*
+!temp/.gitkeep
+log/*
+!log/.gitkeep
+Dockerfile
+docker-compose.yml
+.dockerignore
+readme.md

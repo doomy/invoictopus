@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: invoictopus-web
+    ports:
+      - "8080:80"
+    volumes:
+      # Mount source code for development
+      - ./app:/var/www/html/app
+      - ./www:/var/www/html/www
+      - ./temp:/var/www/html/temp
+      - ./log:/var/www/html/log
+      # Keep vendor in container for performance
+      - /var/www/html/vendor
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html/www
+    restart: unless-stopped

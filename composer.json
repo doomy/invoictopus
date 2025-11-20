@@ -30,7 +30,7 @@
 		"doomy/migrator": "^2.0.0",
 		"doomy/repository": "^3.2.2",
 		"doomy/ormtopus": "^1.0",
-		"doomy/datagrid":"1.5.0",
+		"doomy/datagrid":"1.6.1",
 		"doomy/stringtools": "^2.1.1",
 		"dfridrich/qr-platba": "^2.0",
 		"doomy/extended-nette-form": "^v2.3.2"
