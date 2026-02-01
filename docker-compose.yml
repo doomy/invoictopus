@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: invoictopus-web
     ports:
-      - "8080:80"
+      - "${HOST_PORT:-8081}:80"
     volumes:
       # Mount source code for development
       - ./app:/var/www/html/app
