@@ -97,4 +97,4 @@ public function __construct(DataEntityManager $data, DataGridEntryFactory $dataG
 - Primary keys: `ID` or `id` depending on migration version
 
 ## TODO Items
-- Implement Czech translations (currently Czech-only)
+- Add internationalization / multi-language support (currently Czech-only)
