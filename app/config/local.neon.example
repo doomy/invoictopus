@@ -1,0 +1,8 @@
+parameters:
+	dibi_prod:
+		driver: mysqli
+		host: localhost
+		username: your_username
+		password: your_password
+		database: invoictopus
+		charset: utf8mb4
