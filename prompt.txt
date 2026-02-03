@@ -1,0 +1,5 @@
+Please:
+
+- create a database container in local stack for development purposes
+- copy the schema invoictopus with all data from remote production database (credentials can be found in local.neon configuration file)
+- rename local.neon to local.neon.prod and create a new local.neon file that connects to the local database instance
