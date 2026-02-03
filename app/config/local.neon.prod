@@ -1,0 +1,8 @@
+parameters:
+    dibi_prod:
+        driver: mysqli
+        host: atlas.blanktopus.com
+        username: invoictopus
+        password: qRHLBFIaQwJkI8qHqRur
+        database: invoictopus
+        lazy: true
