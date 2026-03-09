@@ -1,4 +1,5 @@
 parameters:
+    dataEnvironment: production
     migrator:
         migrations_directory: ../sql
 
@@ -13,6 +14,7 @@ session:
 
 services:
 	router: App\Router\RouterFactory::createRouter
+	- App\Presenters\InvoicePresenter(dataEnvironment: %dataEnvironment%)
 	connection: Doomy\CustomDibi\Connection(%dibi_prod%)
 	entityFactory: Doomy\Repository\EntityFactory(@connection)
 	repoFactory: Doomy\Repository\RepoFactory(@connection, @entityFactory)

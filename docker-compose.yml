@@ -18,4 +18,29 @@ services:
       - /var/www/html/vendor
     environment:
       - APACHE_DOCUMENT_ROOT=/var/www/html/www
+    depends_on:
+      db:
+        condition: service_healthy
     restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    container_name: invoictopus-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: invoictopus
+      MYSQL_USER: invoictopus
+      MYSQL_PASSWORD: localpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - invoictopus-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  invoictopus-db-data:

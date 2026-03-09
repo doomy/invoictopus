@@ -1,0 +1,9 @@
+parameters:
+    dataEnvironment: local
+    dibi_prod:
+        driver: mysqli
+        host: db
+        username: invoictopus
+        password: localpass
+        database: invoictopus
+        lazy: true
