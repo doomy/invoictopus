@@ -26,11 +26,22 @@ class InvoicePresenter extends Presenter
 
     private DataEntityManager $data;
     private DataGridEntryFactory $dataGridEntryFactory;
+    private string $dataEnvironment;
 
-    public function __construct(DataEntityManager $data, DataGridEntryFactory $dataGridEntryFactory)
-    {
+    public function __construct(
+        DataEntityManager $data,
+        DataGridEntryFactory $dataGridEntryFactory,
+        string $dataEnvironment = 'production'
+    ) {
         $this->data = $data;
         $this->dataGridEntryFactory = $dataGridEntryFactory;
+        $this->dataEnvironment = $dataEnvironment;
+    }
+
+    public function beforeRender(): void
+    {
+        parent::beforeRender();
+        $this->template->dataEnvironment = $this->dataEnvironment;
     }
 
     public function renderForm() {
