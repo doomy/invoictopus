@@ -9,20 +9,25 @@ use Doomy\DataGrid\DataGridEntryFactory;
 use Doomy\Helper\StringTools;
 use Doomy\Ormtopus\DataEntityManager;
 use Invoictopus\Invoice\Invoice;
+use Invoictopus\Invoice\InvoiceFactory;
 use Invoictopus\Invoice\Item;
+use Invoictopus\Invoice\Service\InvoiceService;
+use Invoictopus\Invoice\View\InvoiceItemView;
+use Invoictopus\Invoice\View\InvoiceItemViewFactory;
 use Invoictopus\Response\MpdfResponse;
 use Invoictopus\TemplateFilter\Price;
 use Latte\Engine as LatteEngine;
 use Doomy\ExtendedNetteForm\Form;
 use Nette\Application\UI\Presenter;
 use Nette\ComponentModel\IComponent;
+use Invoictopus\Invoice\InvoiceItemFactory;
 
 class InvoicePresenter extends Presenter
 {
     private const VAT_RATE = 0;
 
     private $lastInvoice;
-    private int $itemCount = 2;
+    private int $itemCount = 1;
 
     private DataEntityManager $data;
     private DataGridEntryFactory $dataGridEntryFactory;
@@ -31,7 +36,11 @@ class InvoicePresenter extends Presenter
     public function __construct(
         DataEntityManager $data,
         DataGridEntryFactory $dataGridEntryFactory,
-        string $dataEnvironment = 'production'
+        string $dataEnvironment = 'production',
+        private readonly InvoiceItemFactory $invoiceItemFactory,
+        private readonly InvoiceFactory $invoiceFactory,
+        private readonly InvoiceService $invoiceService,
+        private readonly InvoiceItemViewFactory $invoiceItemViewFactory
     ) {
         $this->data = $data;
         $this->dataGridEntryFactory = $dataGridEntryFactory;
@@ -52,9 +61,13 @@ class InvoicePresenter extends Presenter
     public function renderGenerate() {
         $latte = new LatteEngine();
         $latte->addFilter('price', new Price());
-        $templateData = $this->getTemplateData();
+
+        $itemsRawData = $this->getInvoiceItemsRawdata();
+        $invoiceId = (int) $this->getHttpRequest()->getPost('ID') ?? throw new \RuntimeException("Invoice number is required.");
+        $invoiceItems = $this->invoiceItemFactory->createItemsFromData($itemsRawData, $invoiceId);
+        $templateData = $this->getTemplateData($invoiceItems, $invoiceId);
         $html = $latte->renderToString(__DIR__ . '/../templates/invoice.latte', $templateData);
-        $this->saveInvoice($templateData);
+        $this->invoiceService->saveInvoice($templateData, $invoiceItems);
 
         $this->sendResponse(new MpdfResponse($html, $this->assembleInvoiceFilename($templateData)));
     }
@@ -80,30 +93,30 @@ class InvoicePresenter extends Presenter
         }
         $form = new Form();
         $form->setAction($this->link('Invoice:generate'));
-        $form->addInteger('ID', 'Invoice id')->setDefaultValue((int)$lastInvoice->ID+1);
-        $form->addText('SUPPLIER_NAME')->setDefaultValue($referenceInvoice->SUPPLIER_NAME);
-        $form->addText('SUPPLIER_ADDRESS_1')->setDefaultValue($referenceInvoice->SUPPLIER_ADDRESS_1);
-        $form->addText('SUPPLIER_ADDRESS_2')->setDefaultValue($referenceInvoice->SUPPLIER_ADDRESS_2);
-        $form->addText('SUPPLIER_COMPANY_NR')->setDefaultValue($referenceInvoice->SUPPLIER_COMPANY_NR);
-        $form->addText('SUPPLIER_VAT_NR')->setDefaultValue($referenceInvoice->SUPPLIER_VAT_NR);
-        $form->addText('CUSTOMER_NAME')->setDefaultValue($referenceInvoice->CUSTOMER_NAME);
-        $form->addText('CUSTOMER_ADDRESS_1')->setDefaultValue($referenceInvoice->CUSTOMER_ADDRESS_1);
-        $form->addText('CUSTOMER_ADDRESS_2')->setDefaultValue($referenceInvoice->CUSTOMER_ADDRESS_2);
-        $form->addText('CUSTOMER_COMPANY_NR')->setDefaultValue($referenceInvoice->CUSTOMER_COMPANY_NR);
-        $form->addText('CUSTOMER_VAT_NR')->setDefaultValue($referenceInvoice->CUSTOMER_VAT_NR);
-        $form->addText('BANK_ACCOUNT_NR')->setDefaultValue($referenceInvoice->BANK_ACCOUNT_NR);
+        $form->addInteger('ID', 'Invoice id')->setDefaultValue((int)$lastInvoice->id+1);
+        $form->addText('SUPPLIER_NAME')->setDefaultValue($referenceInvoice->supplier_name);
+        $form->addText('SUPPLIER_ADDRESS_1')->setDefaultValue($referenceInvoice->supplier_address_1);
+        $form->addText('SUPPLIER_ADDRESS_2')->setDefaultValue($referenceInvoice->supplier_address_2);
+        $form->addText('SUPPLIER_COMPANY_NR')->setDefaultValue($referenceInvoice->supplier_company_nr);
+        $form->addText('SUPPLIER_VAT_NR')->setDefaultValue($referenceInvoice->supplier_vat_nr);
+        $form->addText('CUSTOMER_NAME')->setDefaultValue($referenceInvoice->customer_name);
+        $form->addText('CUSTOMER_ADDRESS_1')->setDefaultValue($referenceInvoice->customer_address_1);
+        $form->addText('CUSTOMER_ADDRESS_2')->setDefaultValue($referenceInvoice->customer_address_2);
+        $form->addText('CUSTOMER_COMPANY_NR')->setDefaultValue($referenceInvoice->customer_company_nr);
+        $form->addText('CUSTOMER_VAT_NR')->setDefaultValue($referenceInvoice->customer_vat_nr);
+        $form->addText('BANK_ACCOUNT_NR')->setDefaultValue($referenceInvoice->bank_account_nr);
         $form->addDate('INVOICE_DATE')->setDefaultValue($invoiceDate);
         $form->addDate('TAXABLE_DATE')->setDefaultValue((new \DateTime())->modify("last day of previous month"));
         $form->addDate('DUE_DATE')->setDefaultValue($dueDate);
-        $items = !empty($referenceInvoice) ? $referenceInvoice->getItems() : [];
+        $items = !empty($referenceInvoice) ? $this->data->findAll(Item::class, ['invoice_id' => $referenceInvoice->id]) : [];
         $item = array_shift($items);
         $itemsContainer = $form->addContainer('ITEMS');
         for ($i = 1; $i <= $this->itemCount; $i++) {
             $itemContainer = $itemsContainer->addContainer((string) $i-1);
-            $itemContainer->addText('NAME')->setDefaultValue($item->ITEM_NAME);
-            $itemContainer->addInteger('AMOUNT')->setDefaultValue($item->AMOUNT);
-            $itemContainer->addInteger('PRICE')->setDefaultValue($item->PRICE);
-            $itemContainer->addInteger('VAT_RATE', 'VAT rate(%)')->setDefaultValue($item->VAT_RATE);
+            $itemContainer->addText('NAME')->setDefaultValue($item->item_name);
+            $itemContainer->addInteger('AMOUNT')->setDefaultValue($item->amount);
+            $itemContainer->addInteger('PRICE')->setDefaultValue($item->price);
+            $itemContainer->addInteger('VAT_RATE', 'VAT rate(%)')->setDefaultValue($item->vat_rate);
         }
         $form->addSubmit('Generate', 'Generate');
         $form->onSuccess[] = function () {};
@@ -117,7 +130,7 @@ class InvoicePresenter extends Presenter
         $items = [];
         /** @var Invoice $invoice */
         foreach ($invoices as $invoice) {
-            $items[$invoice->ID] = sprintf("Invoice %d", $invoice->ID) . ": " . $invoice->CUSTOMER_NAME;
+            $items[$invoice->id] = sprintf("Invoice %d", $invoice->id) . ": " . $invoice->customer_name;
         }
         $items = array_reverse($items, TRUE);
         $form = new Form();
@@ -128,13 +141,12 @@ class InvoicePresenter extends Presenter
         return $form;
     }
 
-    private function getTemplateData(): array
+    private function getTemplateData(array $invoiceItems, int $invoiceId): array
     {
-        $invoiceItems = $this->getInvoiceItems();
+        $invoiceItemViews = $this->invoiceItemViewFactory->createFromInvoiceItems($invoiceItems);
+        $totalAmount = $this->calculateItemsTotalPrice($invoiceItemViews);
 
-        $totalAmount = $this->calculateItemsTotalPrice($invoiceItems);
-
-        $invoiceNr = $this->getHttpRequest()->getPost('ID');
+        $invoiceNr = (string) $invoiceId;
         $bankAccountNr = $this->getHttpRequest()->getPost('BANK_ACCOUNT_NR');
         $dueDate = $this->getHttpRequest()->getPost('DUE_DATE');
 
@@ -169,7 +181,7 @@ class InvoicePresenter extends Presenter
             'invoiceDate' => $this->getHttpRequest()->getPost('INVOICE_DATE'),
             'taxableDate' => $this->getHttpRequest()->getPost('TAXABLE_DATE'),
             'dueDate' => $dueDate,
-            'invoicedItems' => $invoiceItems,
+            'invoicedItems' => $invoiceItemViews,
             'vatRate' => static::VAT_RATE,
             'total' => [
                 'amount' => $totalAmount,
@@ -186,11 +198,11 @@ class InvoicePresenter extends Presenter
         }
 
         $lastInvoice = $this->data->findOne(
-            Invoice::class, [], 'ID DESC'
+            Invoice::class, [], 'id DESC'
         );
 
         if (empty($lastInvoice)) {
-            $lastInvoice = $this->data->create(Invoice::class, ['ID' => 0]);
+            $lastInvoice = new Invoice(id: 0);
         }
 
         return $this->lastInvoice = $lastInvoice;
@@ -205,43 +217,10 @@ class InvoicePresenter extends Presenter
         return $amount * $itemPrice;
     }
 
-    private function saveInvoice(array $invoiceData) {
-        $this->data->save(
-            Invoice::class,
-            [
-                'ID' => $invoiceData['invoiceNr'],
-                'SUPPLIER_NAME' => $invoiceData['supplierName'],
-                'SUPPLIER_ADDRESS_1' => $invoiceData['supplierAddress1'],
-                'SUPPLIER_ADDRESS_2' => $invoiceData['supplierAddress2'],
-                'SUPPLIER_COMPANY_NR' => $invoiceData['supplierCompanyNr'],
-                'SUPPLIER_VAT_NR' => $invoiceData['supplierVatNr'],
-                'CUSTOMER_NAME' => $invoiceData['customerName'],
-                'CUSTOMER_ADDRESS_1' => $invoiceData['customerAddress1'],
-                'CUSTOMER_ADDRESS_2' => $invoiceData['customerAddress2'],
-                'CUSTOMER_COMPANY_NR' => $invoiceData['customerCompanyNr'],
-                'CUSTOMER_VAT_NR' => $invoiceData['customerVatNr'],
-                'BANK_ACCOUNT_NR' => $invoiceData['bankAccountNr'],
-                'INVOICE_DATE' => new \DateTime($invoiceData['invoiceDate']),
-                'TAXABLE_DATE' => new \DateTime($invoiceData['taxableDate']),
-                'DUE_DATE' => new \DateTime($invoiceData['dueDate']),
-            ]
-        );
-        foreach ($invoiceData['invoicedItems'] as $item) {
-            $this->data->save(
-                Item::class,
-                [
-                    'INVOICE_ID' => $invoiceData['invoiceNr'],
-                    'ITEM_NAME' => $item['item'],
-                    'AMOUNT' => $item['amount'],
-                    'PRICE' => $item['price'],
-                    'VAT_RATE' => $item['vatRate'],
-                    'CURRENCY' => $item['currency'],
-                ]
-            );
-        }
-    }
 
-    private function getInvoiceItems(): array
+
+
+    private function getInvoiceItemsRawdata(): array
     {
         $items = [];
         foreach ($this->getHttpRequest()->getPost('ITEMS') as $item) {
@@ -258,12 +237,15 @@ class InvoicePresenter extends Presenter
         return $items;
     }
 
+    /**
+     * @param InvoiceItemView[] $items
+     */
     private function calculateItemsTotalPrice(array $items): float
     {
         $sum = (float) 0;
 
         foreach ($items as $item) {
-            $sum += (float) $item['total'];
+            $sum += $item->getTotal();
         }
 
         return $sum;
@@ -286,9 +268,9 @@ class InvoicePresenter extends Presenter
         $dataGrid = new DataGrid($this->dataGridEntryFactory, $this->data, Invoice::class, [], FALSE, FALSE);
         $dataGrid->setReadOnly(FALSE);
         $dataGrid->setPreventAdd(TRUE);
-        $dataGrid->setCustomOrderBy('ID DESC');
+        $dataGrid->setCustomOrderBy('id DESC');
         $dataGrid->onEvent(DataGrid::EVENT_ITEM_DELETED, function(int $invoiceId) {
-            $this->data->delete(Item::class, ['INVOICE_ID' => $invoiceId]);
+            $this->data->delete(Item::class, ['invoice_id' => $invoiceId]);
             $this->data->deleteById(Invoice::class, $invoiceId);
         });
         return $dataGrid;

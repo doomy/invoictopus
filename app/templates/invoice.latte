@@ -1,3 +1,6 @@
+{varType int $invoiceNr}
+{varType Invoictopus\Invoice\View\InvoiceItemView[] $invoicedItems}
+
 <!doctype html>
 
 <html lang="cs">
@@ -131,22 +134,22 @@
         {foreach $invoicedItems as $invoicedItem}
             <tr>
                 <td>
-                    {$invoicedItem[item]}
+                    {$invoicedItem->getItemName()}
                 </td>
                 <td style="padding-right: 1em;">
-                    {$invoicedItem[amount]|number}
+                    {$invoicedItem->getAmount()|number}
                 </td>
                 <td>
-                    {$invoicedItem[price]|price} {$invoicedItem[currency]}
+                    {$invoicedItem->getPrice()|price} {$invoicedItem->getCurrency()}
                 </td>
                 <td>
-                    {$invoicedItem[price] * $invoicedItem[amount]|price} {$invoicedItem[currency]}
+                    {$invoicedItem->getPrice() * $invoicedItem->getAmount()|price} {$invoicedItem->getCurrency()}
                 </td>
                 <td>
-                    {$invoicedItem[vatPrice] * $invoicedItem[amount]|price} {$invoicedItem[currency]}
+                    {$invoicedItem->getVatPrice() * $invoicedItem->getAmount()|price} {$invoicedItem->getCurrency()}
                 </td>
                 <td>
-                    {$invoicedItem[total]|price} {$invoicedItem[currency]}
+                    {$invoicedItem->getTotal()|price} {$invoicedItem->getCurrency()}
                 </td>
             </tr>
         {/foreach}

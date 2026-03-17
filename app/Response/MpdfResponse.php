@@ -44,7 +44,28 @@ class MpdfResponse implements \Nette\Application\IResponse
         $mpdf->AddFontDirectory(__DIR__ . '/../../www/fonts');
         $mpdf->AddFont('arial');
         $mpdf->SetFont('Arial');
-        @$mpdf->WriteHtml($this->html);
+
+        $html = $this->inlineExternalStylesheets($this->html);
+        @$mpdf->WriteHtml($html);
         $mpdf->Output($this->filename, Destination::INLINE);
+    }
+
+    private function inlineExternalStylesheets(string $html): string
+    {
+        $cssDir = __DIR__ . '/../../www/css';
+
+        $html = preg_replace_callback(
+            '#<link\s[^>]*href=["\'][^"\']*/css/([^"\']+)["\'][^>]*>#',
+            function (array $matches) use ($cssDir): string {
+                $cssFile = $cssDir . '/' . $matches[1];
+                if (file_exists($cssFile)) {
+                    return '<style>' . file_get_contents($cssFile) . '</style>';
+                }
+                return $matches[0];
+            },
+            $html
+        );
+
+        return $html;
     }
 }
