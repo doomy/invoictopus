@@ -11,6 +11,18 @@
 		},{
 			"type": "vcs",
 			"url": "git@github.com:doomy/extended-nette-form.git"
+		},
+		{
+			"type": "vcs",
+			"url": "git@github.com:doomy/repository.git"
+		},
+		{
+			"type": "vcs",
+			"url": "git@github.com:doomy/datagrid.git"
+		},
+		{
+			"type": "vcs",
+			"url": "git@github.com:doomy/components.git"
 		}
 	],
 	"require": {
@@ -24,19 +36,20 @@
 		"nette/forms": "^3.2",
 		"nette/http": "^3.3",
 		"nette/mail": "^4.0",
+		"dibi/dibi": "v5.1.1",
 		"nette/robot-loader": "^4.0",
 		"nette/security": "^3.2",
 		"nette/utils": "^4.0",
-		"latte/latte": "^2.5",
+		"latte/latte": "^3",
 		"tracy/tracy": "^2.6",
 		"mpdf/mpdf": "^8.0.0",
-		"doomy/migrator": "^2.0.0",
-		"doomy/repository": "^3.2.2",
-		"doomy/ormtopus": "^1.0",
-		"doomy/datagrid":"^1.7",
+		"doomy/migrator": "^4.2.0",
+		"doomy/repository": "^8.4",
+		"doomy/ormtopus": "^5.0",
+		"doomy/datagrid":"^1.8",
 		"doomy/stringtools": "^2.1.1",
 		"dfridrich/qr-platba": "^2.0",
-		"doomy/extended-nette-form": "^v2.3.2"
+		"doomy/extended-nette-form": "^v3.0.1"
 	},
 	"autoload": {
 		"psr-4": { "Invoictopus\\": "app/", "App\\":  "app/"},
@@ -45,7 +58,7 @@
 	"minimum-stability": "stable",
 	"config": {
 		"platform": {
-			"php": "8.2"
+			"php": "8.5"
 		}
 	}
 }
