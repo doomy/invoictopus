@@ -1,4 +1,6 @@
 FROM php:8.5-apache
+# Note: OPcache is already bundled and enabled in the php:8.5-apache base image.
+# No explicit installation of opcache is needed.
 
 # Install PHP extensions required by Nette
 RUN apt-get update && apt-get install -y \
