@@ -16,7 +16,6 @@ RUN apt-get update && apt-get install -y \
     mysqli \
     zip \
     gd \
-    opcache \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
