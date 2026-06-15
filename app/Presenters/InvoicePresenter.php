@@ -187,7 +187,8 @@ class InvoicePresenter extends Presenter
                 'amount' => $totalAmount,
                 'currency' => Currency::CZK->value,
             ],
-            'qrCode' => $qrPlatba->getQRCodeImage(true, 150)
+            'qrCode' => $qrPlatba->getQRCodeImage(true, 150),
+            'isSupplierVatPayer' => static::VAT_RATE !== 0
         ];
     }
 

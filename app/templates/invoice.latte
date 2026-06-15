@@ -1,6 +1,6 @@
 {varType int $invoiceNr}
 {varType Invoictopus\Invoice\View\InvoiceItemView[] $invoicedItems}
-
+{varType bool $isSupplierVatPayer}
 <!doctype html>
 
 <html lang="cs">
@@ -16,7 +16,7 @@
     <div class="wrapper">
         <div class="head">
             <h1>Faktura<br/> {$invoiceNr}</h1>
-            <span class="smaller">Daňový doklad</span>
+            <span n:if="$isSupplierVatPayer" class="smaller">Daňový doklad</span>
         </div>
     </div>
 
@@ -119,10 +119,10 @@
             <th>
                 Cena
             </th>
-            <th>
+            <th n:if="$isSupplierVatPayer">
                 Základ DPH
             </th>
-            <th>
+            <th n:if="$isSupplierVatPayer">
                 DPH {$vatRate} %
             </th>
             <th>
@@ -142,10 +142,10 @@
                 <td>
                     {$invoicedItem->getPrice()|price} {$invoicedItem->getCurrency()}
                 </td>
-                <td>
+                <td n:if="$isSupplierVatPayer">
                     {$invoicedItem->getPrice() * $invoicedItem->getAmount()|price} {$invoicedItem->getCurrency()}
                 </td>
-                <td>
+                <td n:if="$isSupplierVatPayer">
                     {$invoicedItem->getVatPrice() * $invoicedItem->getAmount()|price} {$invoicedItem->getCurrency()}
                 </td>
                 <td>
