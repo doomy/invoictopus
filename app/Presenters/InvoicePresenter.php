@@ -118,7 +118,7 @@ class InvoicePresenter extends Presenter
             $itemContainer->addInteger('PRICE')->setDefaultValue($item->price);
             $itemContainer->addInteger('VAT_RATE', 'VAT rate(%)')->setDefaultValue($item->vat_rate);
         }
-        $form->addSubmit('Generate', 'Generate');
+        $form->addSubmit('Generate', 'Generate')->setHtmlAttribute("class", "btn btn-primary");
         $form->onSuccess[] = function () {};
 
         return $form;
@@ -135,7 +135,7 @@ class InvoicePresenter extends Presenter
         $items = array_reverse($items, TRUE);
         $form = new Form();
         $form->addSelect('invoice_id', 'Select reference invoice', $items);
-        $form->addSubmit("go", "Go!");
+        $form->addSubmit("go", "Go!")->setHtmlAttribute("class", "btn btn-primary");
         $form->setAction($this->link('Invoice:form'));
         $form->onSuccess[] = function () {};
         return $form;
