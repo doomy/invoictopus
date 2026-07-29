@@ -22,6 +22,10 @@
 		},
 		{
 			"type": "vcs",
+			"url": "git@github.com:doomy/QRPlatba.git"
+		},
+		{
+			"type": "vcs",
 			"url": "git@github.com:doomy/components.git"
 		}
 	],
@@ -48,7 +52,7 @@
 		"doomy/ormtopus": "^5.0",
 		"doomy/datagrid":"^1.8",
 		"doomy/stringtools": "^2.1.1",
-		"dfridrich/qr-platba": "^2.0",
+		"doomy/qr-platba": "^2.1",
 		"doomy/extended-nette-form": "^v4"
 	},
 	"autoload": {
