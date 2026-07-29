@@ -49,7 +49,7 @@
 		"doomy/datagrid":"^1.8",
 		"doomy/stringtools": "^2.1.1",
 		"dfridrich/qr-platba": "^2.0",
-		"doomy/extended-nette-form": "^v3.0.1"
+		"doomy/extended-nette-form": "^v4"
 	},
 	"autoload": {
 		"psr-4": { "Invoictopus\\": "app/", "App\\":  "app/"},
