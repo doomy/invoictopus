@@ -36,11 +36,11 @@ class InvoicePresenter extends Presenter
     public function __construct(
         DataEntityManager $data,
         DataGridEntryFactory $dataGridEntryFactory,
-        string $dataEnvironment = 'production',
         private readonly InvoiceItemFactory $invoiceItemFactory,
         private readonly InvoiceFactory $invoiceFactory,
         private readonly InvoiceService $invoiceService,
-        private readonly InvoiceItemViewFactory $invoiceItemViewFactory
+        private readonly InvoiceItemViewFactory $invoiceItemViewFactory,
+        string $dataEnvironment = 'production',
     ) {
         $this->data = $data;
         $this->dataGridEntryFactory = $dataGridEntryFactory;
