@@ -14,8 +14,7 @@ services:
       - ./www:/var/www/html/www
       - ./temp:/var/www/html/temp
       - ./log:/var/www/html/log
-      # Keep vendor in container for performance
-      - /var/www/html/vendor
+      - ./vendor:/var/www/html/vendor
     environment:
       - APACHE_DOCUMENT_ROOT=/var/www/html/www
     depends_on:
