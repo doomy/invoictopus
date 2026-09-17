@@ -64,5 +64,8 @@
 		"platform": {
 			"php": "8.5"
 		}
+	},
+	"require-dev": {
+		"symplify/easy-coding-standard": "*"
 	}
 }
