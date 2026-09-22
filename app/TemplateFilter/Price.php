@@ -8,5 +8,4 @@ class Price
     {
         return number_format($number, 2, ",", " ");
     }
-
 }

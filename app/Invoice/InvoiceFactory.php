@@ -29,5 +29,4 @@ final readonly class InvoiceFactory
             total_currency: $invoiceData['total']['currency'],
         );
     }
-
 }

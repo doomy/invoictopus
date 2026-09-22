@@ -53,5 +53,4 @@ final readonly class InvoiceItemView
     {
         return $this->total;
     }
-
 }
