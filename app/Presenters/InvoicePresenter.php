@@ -27,10 +27,13 @@ class InvoicePresenter extends Presenter
     private const VAT_RATE = 0;
 
     private $lastInvoice;
+
     private int $itemCount = 1;
 
     private DataEntityManager $data;
+
     private DataGridEntryFactory $dataGridEntryFactory;
+
     private string $dataEnvironment;
 
     public function __construct(
@@ -55,7 +58,6 @@ class InvoicePresenter extends Presenter
 
     public function renderForm() {
 
-
     }
 
     public function renderGenerate() {
@@ -63,7 +65,8 @@ class InvoicePresenter extends Presenter
         $latte->addFilter('price', new Price());
 
         $itemsRawData = $this->getInvoiceItemsRawdata();
-        $invoiceId = (int) $this->getHttpRequest()->getPost('ID') ?? throw new \RuntimeException("Invoice number is required.");
+        $invoiceId = (int) $this->getHttpRequest()
+            ->getPost('ID') ?? throw new \RuntimeException("Invoice number is required.");
         $invoiceItems = $this->invoiceItemFactory->createItemsFromData($itemsRawData, $invoiceId);
         $templateData = $this->getTemplateData($invoiceItems, $invoiceId);
         $html = $latte->renderToString(__DIR__ . '/../templates/invoice.latte', $templateData);
@@ -76,11 +79,9 @@ class InvoicePresenter extends Presenter
 
     }
 
-
     public function createComponentInvoiceForm() {
         $invoiceDate = new \DateTimeImmutable();
         $dueDate = $invoiceDate->add(new \DateInterval('P15D'));
-
 
         /** @var Invoice */
         $lastInvoice = $this->getLastInvoice();
@@ -93,32 +94,52 @@ class InvoicePresenter extends Presenter
         }
         $form = new Form();
         $form->setAction($this->link('Invoice:generate'));
-        $form->addInteger('ID', 'Invoice id')->setDefaultValue((int)$lastInvoice->id+1);
-        $form->addText('SUPPLIER_NAME')->setDefaultValue($referenceInvoice->supplier_name);
-        $form->addText('SUPPLIER_ADDRESS_1')->setDefaultValue($referenceInvoice->supplier_address_1);
-        $form->addText('SUPPLIER_ADDRESS_2')->setDefaultValue($referenceInvoice->supplier_address_2);
-        $form->addText('SUPPLIER_COMPANY_NR')->setDefaultValue($referenceInvoice->supplier_company_nr);
-        $form->addText('SUPPLIER_VAT_NR')->setDefaultValue($referenceInvoice->supplier_vat_nr);
-        $form->addText('CUSTOMER_NAME')->setDefaultValue($referenceInvoice->customer_name);
-        $form->addText('CUSTOMER_ADDRESS_1')->setDefaultValue($referenceInvoice->customer_address_1);
-        $form->addText('CUSTOMER_ADDRESS_2')->setDefaultValue($referenceInvoice->customer_address_2);
-        $form->addText('CUSTOMER_COMPANY_NR')->setDefaultValue($referenceInvoice->customer_company_nr);
-        $form->addText('CUSTOMER_VAT_NR')->setDefaultValue($referenceInvoice->customer_vat_nr);
-        $form->addText('BANK_ACCOUNT_NR')->setDefaultValue($referenceInvoice->bank_account_nr);
-        $form->addDate('INVOICE_DATE')->setDefaultValue($invoiceDate);
-        $form->addDate('TAXABLE_DATE')->setDefaultValue((new \DateTime())->modify("last day of previous month"));
-        $form->addDate('DUE_DATE')->setDefaultValue($dueDate);
-        $items = !empty($referenceInvoice) ? $this->data->findAll(Item::class, ['invoice_id' => $referenceInvoice->id]) : [];
+        $form->addInteger('ID', 'Invoice id')
+            ->setDefaultValue((int) $lastInvoice->id + 1);
+        $form->addText('SUPPLIER_NAME')
+            ->setDefaultValue($referenceInvoice->supplier_name);
+        $form->addText('SUPPLIER_ADDRESS_1')
+            ->setDefaultValue($referenceInvoice->supplier_address_1);
+        $form->addText('SUPPLIER_ADDRESS_2')
+            ->setDefaultValue($referenceInvoice->supplier_address_2);
+        $form->addText('SUPPLIER_COMPANY_NR')
+            ->setDefaultValue($referenceInvoice->supplier_company_nr);
+        $form->addText('SUPPLIER_VAT_NR')
+            ->setDefaultValue($referenceInvoice->supplier_vat_nr);
+        $form->addText('CUSTOMER_NAME')
+            ->setDefaultValue($referenceInvoice->customer_name);
+        $form->addText('CUSTOMER_ADDRESS_1')
+            ->setDefaultValue($referenceInvoice->customer_address_1);
+        $form->addText('CUSTOMER_ADDRESS_2')
+            ->setDefaultValue($referenceInvoice->customer_address_2);
+        $form->addText('CUSTOMER_COMPANY_NR')
+            ->setDefaultValue($referenceInvoice->customer_company_nr);
+        $form->addText('CUSTOMER_VAT_NR')
+            ->setDefaultValue($referenceInvoice->customer_vat_nr);
+        $form->addText('BANK_ACCOUNT_NR')
+            ->setDefaultValue($referenceInvoice->bank_account_nr);
+        $form->addDate('INVOICE_DATE')
+            ->setDefaultValue($invoiceDate);
+        $form->addDate('TAXABLE_DATE')
+            ->setDefaultValue((new \DateTime())->modify("last day of previous month"));
+        $form->addDate('DUE_DATE')
+            ->setDefaultValue($dueDate);
+        $items = ! empty($referenceInvoice) ? $this->data->findAll(Item::class, ['invoice_id' => $referenceInvoice->id]) : [];
         $item = array_shift($items);
         $itemsContainer = $form->addContainer('ITEMS');
         for ($i = 1; $i <= $this->itemCount; $i++) {
-            $itemContainer = $itemsContainer->addContainer((string) $i-1);
-            $itemContainer->addText('NAME')->setDefaultValue($item->item_name);
-            $itemContainer->addInteger('AMOUNT')->setDefaultValue($item->amount);
-            $itemContainer->addInteger('PRICE')->setDefaultValue($item->price);
-            $itemContainer->addInteger('VAT_RATE', 'VAT rate(%)')->setDefaultValue($item->vat_rate);
+            $itemContainer = $itemsContainer->addContainer((string) $i - 1);
+            $itemContainer->addText('NAME')
+                ->setDefaultValue($item->item_name);
+            $itemContainer->addInteger('AMOUNT')
+                ->setDefaultValue($item->amount);
+            $itemContainer->addInteger('PRICE')
+                ->setDefaultValue($item->price);
+            $itemContainer->addInteger('VAT_RATE', 'VAT rate(%)')
+                ->setDefaultValue($item->vat_rate);
         }
-        $form->addSubmit('Generate', 'Generate')->setHtmlAttribute("class", "btn btn-primary");
+        $form->addSubmit('Generate', 'Generate')
+            ->setHtmlAttribute("class", "btn btn-primary");
         $form->onSuccess[] = function () {};
 
         return $form;
@@ -135,7 +156,8 @@ class InvoicePresenter extends Presenter
         $items = array_reverse($items, TRUE);
         $form = new Form();
         $form->addSelect('invoice_id', 'Select reference invoice', $items);
-        $form->addSubmit("go", "Go!")->setHtmlAttribute("class", "btn btn-primary");
+        $form->addSubmit("go", "Go!")
+            ->setHtmlAttribute("class", "btn btn-primary");
         $form->setAction($this->link('Invoice:form'));
         $form->onSuccess[] = function () {};
         return $form;
@@ -147,8 +169,10 @@ class InvoicePresenter extends Presenter
         $totalAmount = $this->calculateItemsTotalPrice($invoiceItemViews);
 
         $invoiceNr = (string) $invoiceId;
-        $bankAccountNr = $this->getHttpRequest()->getPost('BANK_ACCOUNT_NR');
-        $dueDate = $this->getHttpRequest()->getPost('DUE_DATE');
+        $bankAccountNr = $this->getHttpRequest()
+            ->getPost('BANK_ACCOUNT_NR');
+        $dueDate = $this->getHttpRequest()
+            ->getPost('DUE_DATE');
 
         $qrPlatba = new QRPlatba();
         $qrPlatba
@@ -165,21 +189,34 @@ class InvoicePresenter extends Presenter
         }
 
         return [
-            'basePath' => $this->getHttpRequest()->getUrl()->getBasePath(),
+            'basePath' => $this->getHttpRequest()
+                ->getUrl()
+                ->getBasePath(),
             'invoiceNr' => $invoiceNr,
-            'supplierName' => $this->getHttpRequest()->getPost('SUPPLIER_NAME'),
-            'supplierAddress1' => $this->getHttpRequest()->getPost('SUPPLIER_ADDRESS_1'),
-            'supplierAddress2' => $this->getHttpRequest()->getPost('SUPPLIER_ADDRESS_2'),
-            'supplierCompanyNr' => $this->getHttpRequest()->getPost('SUPPLIER_COMPANY_NR'),
+            'supplierName' => $this->getHttpRequest()
+                ->getPost('SUPPLIER_NAME'),
+            'supplierAddress1' => $this->getHttpRequest()
+                ->getPost('SUPPLIER_ADDRESS_1'),
+            'supplierAddress2' => $this->getHttpRequest()
+                ->getPost('SUPPLIER_ADDRESS_2'),
+            'supplierCompanyNr' => $this->getHttpRequest()
+                ->getPost('SUPPLIER_COMPANY_NR'),
             'supplierVatNr' => $supplierVatNr,
-            'customerName' => $this->getHttpRequest()->getPost('CUSTOMER_NAME'),
-            'customerAddress1' => $this->getHttpRequest()->getPost('CUSTOMER_ADDRESS_1'),
-            'customerAddress2' => $this->getHttpRequest()->getPost('CUSTOMER_ADDRESS_2'),
-            'customerCompanyNr' => $this->getHttpRequest()->getPost('CUSTOMER_COMPANY_NR'),
-            'customerVatNr' => $this->getHttpRequest()->getPost('CUSTOMER_VAT_NR'),
+            'customerName' => $this->getHttpRequest()
+                ->getPost('CUSTOMER_NAME'),
+            'customerAddress1' => $this->getHttpRequest()
+                ->getPost('CUSTOMER_ADDRESS_1'),
+            'customerAddress2' => $this->getHttpRequest()
+                ->getPost('CUSTOMER_ADDRESS_2'),
+            'customerCompanyNr' => $this->getHttpRequest()
+                ->getPost('CUSTOMER_COMPANY_NR'),
+            'customerVatNr' => $this->getHttpRequest()
+                ->getPost('CUSTOMER_VAT_NR'),
             'bankAccountNr' => $bankAccountNr,
-            'invoiceDate' => $this->getHttpRequest()->getPost('INVOICE_DATE'),
-            'taxableDate' => $this->getHttpRequest()->getPost('TAXABLE_DATE'),
+            'invoiceDate' => $this->getHttpRequest()
+                ->getPost('INVOICE_DATE'),
+            'taxableDate' => $this->getHttpRequest()
+                ->getPost('TAXABLE_DATE'),
             'dueDate' => $dueDate,
             'invoicedItems' => $invoiceItemViews,
             'vatRate' => static::VAT_RATE,
@@ -199,7 +236,9 @@ class InvoicePresenter extends Presenter
         }
 
         $lastInvoice = $this->data->findOne(
-            Invoice::class, [], 'id DESC'
+            Invoice::class,
+            [],
+            'id DESC'
         );
 
         if (empty($lastInvoice)) {
@@ -217,9 +256,6 @@ class InvoicePresenter extends Presenter
 
         return $amount * $itemPrice;
     }
-
-
-
 
     private function getInvoiceItemsRawdata(): array
     {
@@ -276,5 +312,4 @@ class InvoicePresenter extends Presenter
         });
         return $dataGrid;
     }
-
 }

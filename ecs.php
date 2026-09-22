@@ -18,20 +18,14 @@ return ECSConfig::configure()
     // add a single rule
     ->withRules([
         NoUnusedImportsFixer::class,
-    ])
-
-    // add sets - group of rules, from easiest to more complex ones
-    // uncomment one, apply one, commit, PR, merge and repeat
-    //->withPreparedSets(
-    //      spaces: true,
+    ])->withPreparedSets(
+        spaces: true,
     //      namespaces: true,
     //      docblocks: true,
     //      arrays: true,
     //      comments: true,
-    //)
-
+    )
     // ...but first: take it step by step
-    ->withSpacesLevel(0)
     ->withArrayLevel(0)
     ->withControlStructuresLevel(0)
     ->withDocblockLevel(0);

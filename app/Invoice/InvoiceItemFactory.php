@@ -14,14 +14,13 @@ final readonly class InvoiceItemFactory
             $items[] = new Item(
                 invoice_id: $invoiceId,
                 item_name: $itemData['item'],
-                amount: (int)$itemData['amount'],
-                price: (float)$itemData['price'],
-                vat_rate: (int)$itemData['vatRate'],
+                amount: (int) $itemData['amount'],
+                price: (float) $itemData['price'],
+                vat_rate: (int) $itemData['vatRate'],
                 currency: $itemData['currency'],
             );
         }
 
         return $items;
     }
-
 }

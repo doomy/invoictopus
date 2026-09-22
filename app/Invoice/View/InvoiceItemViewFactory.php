@@ -26,7 +26,7 @@ final readonly class InvoiceItemViewFactory
             vatPrice: round($item->getPrice() * ($item->getVat_rate() / 100), 2),
             vatRate: $item->getVat_rate(),
             currency: $item->getCurrency(),
-            total: $this->calculateTotalPrice($item->getAmount(), $item->getPrice(), $item->getVat_rate(),)
+            total: $this->calculateTotalPrice($item->getAmount(), $item->getPrice(), $item->getVat_rate(), )
         );
     }
 
@@ -38,5 +38,4 @@ final readonly class InvoiceItemViewFactory
 
         return $amount * $itemPrice;
     }
-
 }

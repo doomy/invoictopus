@@ -10,6 +10,7 @@ use Mpdf\Output\Destination;
 class MpdfResponse implements \Nette\Application\IResponse
 {
     private $html;
+
     private ?string $filename;
 
     public function __construct(string $html, ?string $filename = NULL)
