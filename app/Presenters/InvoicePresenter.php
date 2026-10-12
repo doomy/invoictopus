@@ -28,7 +28,9 @@ class InvoicePresenter extends Presenter
 
     private $lastInvoice;
 
-    private int $itemCount = 1;
+    private const DEFAULT_ITEM_COUNT = 1;
+
+    private const MAX_ITEM_COUNT = 50;
 
     private DataEntityManager $data;
 
@@ -86,14 +88,17 @@ class InvoicePresenter extends Presenter
         /** @var Invoice */
         $lastInvoice = $this->getLastInvoice();
         $referenceInvoice = NULL;
-        if (isset($_POST['invoice_id'])) {
-            $referenceInvoice = $this->data->findById(Invoice::class, $_POST['invoice_id']);
+        $referenceInvoiceId = $this->getHttpRequest()
+            ->getPost('invoice_id');
+        if ($referenceInvoiceId !== null) {
+            $referenceInvoice = $this->data->findById(Invoice::class, (int) $referenceInvoiceId);
         }
         if (empty($referenceInvoice)) {
             $referenceInvoice = $lastInvoice;
         }
         $form = new Form();
         $form->setAction($this->link('Invoice:generate'));
+        $form->addHidden('invoice_id', (string) $referenceInvoice->id);
         $form->addInteger('ID', 'Invoice id')
             ->setDefaultValue((int) $lastInvoice->id + 1);
         $form->addText('SUPPLIER_NAME')
@@ -124,19 +129,30 @@ class InvoicePresenter extends Presenter
             ->setDefaultValue((new \DateTime())->modify("last day of previous month"));
         $form->addDate('DUE_DATE')
             ->setDefaultValue($dueDate);
-        $items = ! empty($referenceInvoice) ? $this->data->findAll(Item::class, ['invoice_id' => $referenceInvoice->id]) : [];
-        $item = array_shift($items);
+        /** @var Item[] $items */
+        $items = array_values($this->data->findAll(Item::class, ['invoice_id' => $referenceInvoice->id]));
+        $itemCount = $this->resolveItemCount(count($items));
+
+        $form->addInteger('ITEM_COUNT', 'Item count')
+            ->setDefaultValue($itemCount)
+            ->addRule(Form::Range, 'Item count must be between %d and %d.', [1, self::MAX_ITEM_COUNT]);
+        $form->addSubmit('UpdateItems', 'Update items')
+            ->setHtmlAttribute('class', 'btn btn-secondary')
+            ->setHtmlAttribute('formaction', $this->link('Invoice:form'))
+            ->setHtmlAttribute('formnovalidate', 'formnovalidate');
+
         $itemsContainer = $form->addContainer('ITEMS');
-        for ($i = 1; $i <= $this->itemCount; $i++) {
-            $itemContainer = $itemsContainer->addContainer((string) $i - 1);
+        for ($i = 0; $i < $itemCount; $i++) {
+            $item = $items[$i] ?? null;
+            $itemContainer = $itemsContainer->addContainer((string) $i);
             $itemContainer->addText('NAME')
-                ->setDefaultValue($item->item_name);
+                ->setDefaultValue($item?->item_name);
             $itemContainer->addInteger('AMOUNT')
-                ->setDefaultValue($item->amount);
+                ->setDefaultValue($item?->amount);
             $itemContainer->addInteger('PRICE')
-                ->setDefaultValue($item->price);
+                ->setDefaultValue($item?->price);
             $itemContainer->addInteger('VAT_RATE', 'VAT rate(%)')
-                ->setDefaultValue($item->vat_rate);
+                ->setDefaultValue($item?->vat_rate);
         }
         $form->addSubmit('Generate', 'Generate')
             ->setHtmlAttribute("class", "btn btn-primary");
@@ -229,6 +245,23 @@ class InvoicePresenter extends Presenter
         ];
     }
 
+    /**
+     * Item count requested via the form (when the user pressed "Update items"),
+     * otherwise the number of items on the reference invoice, with a sane minimum.
+     */
+    private function resolveItemCount(int $referenceItemCount): int
+    {
+        $requested = $this->getHttpRequest()
+            ->getPost('ITEM_COUNT');
+        if ($requested !== null && $requested !== '') {
+            $count = (int) $requested;
+        } else {
+            $count = max($referenceItemCount, self::DEFAULT_ITEM_COUNT);
+        }
+
+        return min(max($count, 1), self::MAX_ITEM_COUNT);
+    }
+
     private function getLastInvoice(): ?Invoice
     {
         if (isset($this->lastInvoice)) {
@@ -260,7 +293,10 @@ class InvoicePresenter extends Presenter
     private function getInvoiceItemsRawdata(): array
     {
         $items = [];
-        foreach ($this->getHttpRequest()->getPost('ITEMS') as $item) {
+        foreach ($this->getHttpRequest()->getPost('ITEMS') ?? [] as $item) {
+            if (trim((string) ($item['NAME'] ?? '')) === '') {
+                continue;
+            }
             $items[] = [
                 'item' => $item['NAME'],
                 'amount' => $item['AMOUNT'],
